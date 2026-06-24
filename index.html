@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tangerang-Tomang Commute Telemetry</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="home-btn-container">
+                <span class="home-text">Dashboard</span>
+                <div class="logo-pic-fallback">🛰️</div>
+            </div>
+            <div class="nav-title"> 
+                <span class="rgb-word desktop-title">Tangerang - Tomang Corridor Traffic Analysis</span>
+                <span class="rgb-word mobile-title">Live Commute</span>
+            </div>
+            <div class="hotkeys-placeholder">
+                <div class="hotkey-circle" onclick="location.reload()" title="Refresh Data">♻️</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="traffic-analysis">
+            <div class="box hero-intro">
+                <h2>Real-Time Transit Matrix</h2>
+                <p>Tracking spatial telemetry and severe bottlenecks along the <span class="rgb-word">Jakarta-Tangerang Toll Road (Tol Kebon Jeruk)</span> corridor. Live speed inputs are harvested on an hourly automated schedule from TomTom and synced to a cloud storage ledger.</p>
+            </div>
+
+            <div class="dashboard-grid-2col">
+                
+                <div class="box terminal-panel">
+                    <div class="terminal-header">
+                        <h3>🛰️ Node Telemetry Stream</h3>
+                        <span id="last-update-tag">Syncing Ledger...</span>
+                    </div>
+                    <div id="traffic-nodes-container">
+                        <div class="loading-state">Querying secure cloud matrix...</div>
+                    </div>
+                </div>
+
+                <div class="box map-panel">
+                    <div id="traffic-map"></div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="contact-footer">
+        <div class="footer-text">Muhammad Fitran Ramadhan &copy; 2026</div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

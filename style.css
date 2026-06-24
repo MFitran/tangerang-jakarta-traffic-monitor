@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* --- STRUCTURAL INITIALIZATION & CORE RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding-top: 105px;
+    padding-bottom: 40px;
+    background-color: #000000;
+    color: #E0E0E0;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h2 {
+    font-weight: 700;
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+/* --- DEPLOYMENT WRAPPER SYSTEM --- */
+.container {
+    max-width: 1200px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+/* --- THE SYSTEM DESIGN CORNER BOX --- */
+.box {
+    border: 1px solid #121212;
+    border-radius: 20px; 
+    padding: 2rem;
+    background: #020202;
+}
+
+.hero-intro {
+    min-height: 110px;
+    margin-bottom: 25px;
+}
+
+/* --- FIXED STICKY FIXED HEADER ENGINE --- */
+header {
+    width: 100%;
+    border-bottom: 1px solid #121212;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000000; 
+    z-index: 1000;
+}
+
+.header-content {
+    height: 75px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px; 
+    position: relative;
+}
+
+.logo-pic-fallback {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #121212;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: #090909;
+}
+
+.nav-title {
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --- PREMIUM SYSTEM NEON GRADIENT MODULATION --- */
+.rgb-word {
+  background: linear-gradient(to top, #ff0000, #0000ff, #00ff00, #ff0000);
+  background-size: auto 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rgb-gradient-animation 8s linear infinite;
+}
+
+@keyframes rgb-gradient-animation {
+  0% { background-position: center 0%; }
+  100% { background-position: center 200%; }
+}
+
+/* --- INTERACTIVE ACTION TILE UTILITIES --- */
+.hotkeys-placeholder {
+    display: flex;
+    gap: 10px;
+}
+
+.hotkey-circle {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #121212;
+    border-radius: 50%;
+    background-color: #111;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    transition: transform 0.2s ease, border-color 0.2s;
+}
+
+.hotkey-circle:hover {
+    transform: scale(1.15);
+    border-color: #333;
+}
+
+/* --- TWIN SPLIT WEB DASHBOARD LAYOUT SYSTEM --- */
+.dashboard-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 25px;
+}
+
+.terminal-panel {
+    background: #040404;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #121212;
+    padding-bottom: 12px;
+}
+
+#last-update-tag {
+    font-size: 11px;
+    color: #555;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+
+#traffic-nodes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.loading-state {
+    color: #555;
+    text-align: center;
+    font-size: 15px;
+    padding: 20px 0;
+}
+
+.map-panel {
+    padding: 0;
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    border-color: #121212;
+}
+
+#traffic-map {
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+
+/* --- FOOTER ATTACHMENT DEFINITION --- */
+footer.contact-footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 25px;
+    border-top: 1px solid #121212;
+    color: #666;
+}
+
+.footer-text {
+    font-size: 14px;
+}
+
+/* --- GEOMETRICAL LEAFLET BLEND OVERRIDES --- */
+.leaflet-container {
+    background: #000000 !important;
+}
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background: #080808 !important;
+    color: #E0E0E0 !important;
+    border: 1px solid #222 !important;
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- MOBILE LANDSCAPE PORTRAIT CONFIGURATION ENGINE --- */
+@media (max-width: 900px) {
+    body { padding-top: 90px; font-size: 16px; }
+    .dashboard-grid-2col { grid-template-columns: 1fr; gap: 20px; }
+    .map-panel { height: 400px; }
+    .desktop-title { display: none; }
+    .header-content { padding: 0 15px; }
+    .nav-title { font-size: 15px; }
+}
