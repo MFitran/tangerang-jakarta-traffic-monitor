@@ -37,5 +37,5 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
-          TOMTOM_TRAFFIC_API: ${{ TOMTOM_TRAFFIC_API }}
+          TOMTOM_TRAFFIC_API: ${{ secrets.TOMTOM_TRAFFIC_API }}
         run: python ingest_traffic_geometry.py
