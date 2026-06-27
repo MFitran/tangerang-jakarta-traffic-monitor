@@ -102,6 +102,10 @@ header {
   white-space: nowrap;
 }
 
+.mobile-title {
+  display: none;
+}
+
 /* --- GRADIENT TEXT --- */
 .rgb-word {
   background: linear-gradient(
@@ -176,29 +180,12 @@ section#traffic-analysis {
 }
 
 .terminal-panel {
-    background: #040404;
+    background: #000;
     display: flex;
     flex-direction: column;
-    gap: 18px;
     max-height: 600px;
-    overflow-y: auto;
-    padding: 20px 18px 18px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.14) rgba(255,255,255,0.04);
-}
-
-.terminal-panel::-webkit-scrollbar {
-    width: 8px;
-}
-
-.terminal-panel::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.04);
-    border-radius: 999px;
-}
-
-.terminal-panel::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.14);
-    border-radius: 999px;
+    overflow: hidden;
+    padding: 0;
 }
 
 .terminal-header {
@@ -211,8 +198,8 @@ section#traffic-analysis {
     align-items: flex-start;
     gap: 6px;
     border-bottom: 1px solid #121212;
-    padding: 16px 0 12px;
-    background: #040404;
+    padding: 16px 24px 12px;
+    background: #000;
 }
 
 #last-update-tag {
@@ -226,8 +213,34 @@ section#traffic-analysis {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding-block: 16px;
+    overflow-y: auto;
+    flex: 1;
+    padding: 0 18px 18px;
 }
+
+#traffic-nodes-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#traffic-nodes-container::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
+}
+
+#traffic-nodes-container::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.14);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+Get-Content : A positional parameter cannot be found that accepts argument 'style_chunk2.css'.
+At line:1 char:1
++ Get-Content style_chunk1.css style_chunk2.css
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBindingException
+    + FullyQualifiedErrorId : PositionalParameterNotFound,Microsoft.PowerShell.Commands.GetContentCommand
+ 
 
 .loading-state {
     color: #6f7380;
@@ -343,4 +356,5 @@ footer.contact-footer {
     .desktop-title { display: none; }
     .header-content { padding: 0 15px; }
     .nav-title { font-size: 15px; }
+    .mobile-title { display: inline; }
 }
