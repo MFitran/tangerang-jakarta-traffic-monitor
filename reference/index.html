@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fitran</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/profile_picture.jpg">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="home-btn-container">
+                <span class="home-text">Home</span>
+                <span class="logo-pic-wrapper"><img src="assets/profile_picture_t.png" alt="Fitran Profile" class="logo-pic"></span>
+            </a>
+            <div class="nav-title"> 
+                <span class="rgb-word desktop-title">Muhammad Fitran Ramadhan</span>
+                <span class="rgb-word mobile-title">Fitran</span>
+            </div>
+            <div class="hotkeys-placeholder">
+                <div class="hotkey-circle" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="cursor: pointer; display: flex; justify-content: center; align-items: center;" title="Go to Top"><img src="assets/top_icon.png" alt="Top" style="width: 14px; height: 14px;"></div>
+                <div class="hotkey-circle" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" style="cursor: pointer; display: flex; justify-content: center; align-items: center;" title="Go to Bottom"><img src="assets/bottom_icon.png" alt="Bottom" style="width: 14px; height: 14px;"></div>
+                <div class="hotkey-circle" onclick="location.reload()" style="cursor: pointer; display: flex; justify-content: center; align-items: center;" title="Refresh"><img src="assets/refresh_icon.png" alt="Refresh" style="width: 12px; height: 12px;"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section id="about">
+            <div class="box hero-pic" style="padding: 0; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <img src="assets/salaman_rektor_summa_cumlaude.jpg" alt="Fitran with Rektor" style="width: 100%; height: 100%; object-fit: cover; object-position: center 30%;">
+            </div>
+            <div class="box hero-intro">
+                <h2>Hello, I'm <span class="rgb-word">Fitran</span>.</h2>
+                <p>I was born in Kota Tangerang, Banten. I have a high interest in <span class="rgb-word">computer technology</span>, actively following the trends shaping our technological development.</p>
+           </div>
+        </section>
+
+        <section id="updates">
+            <h2 class="section-title">Recent Updates</h2>
+            <div class="grid-3" id="linkedin-posts-container">
+            <div class="grid-2x2" id="linkedin-posts-container">
+                <!-- Posts will be dynamically injected here by main.js -->
+                <div style="text-align: center; width: 100%; grid-column: 1 / -1; color: #666;">Loading recent updates...</div>
+            </div>
+        </section>
+
+        <section id="more">
+            <h2 class="section-title">More</h2>
+            <div class="grid-2x2">
+                <a href="updates.html" class="box hub-box">
+                    <img src="assets/update_icon.png" alt="More Updates">
+                    <h3>More Updates</h3>
+                    <p>Take a closer look at my recent updates to get a better picture of my journey. On this page <span class="rgb-word">I share</span> my life achievements, academic milestones, and professional highlights as they happen.</p>
+                </a>
+                <a href="projects.html" class="box hub-box">
+                    <img src="assets/my_project_icon.png" alt="My Projects">
+                    <h3>My Projects</h3>
+                    <p>Explore my portfolio to see computer <span class="rgb-word">simulations</span> and data models built from scratch. This section highlights hands-on software architecture and systems engineering.</p>
+                </a>
+                <a href="algorithm.html" class="box hub-box">
+                    <img src="assets/algorithmic_solution_icon.png" alt="Algorithmic Solutions">
+                    <h3>Algorithmic Solutions</h3>
+                    <p>Dive into my collection of <span class="rgb-word">data structures and algorithm</span> implementations. This page documents my approach to cracking complex computational problems while maintaining spatial and temporal complexity.</p>
+                </a>
+                <a href="games.html" class="box hub-box">
+                    <img src="assets/minigame_icon.png" alt="Games">
+                    <h3>Games</h3>
+                    <p>You look bored! Test your skills directly against my bots. Here, you can pitch your best strategies against custom, calibrated chess bots and other <span class="rgb-word">game bots</span> compiled to run smoothly and natively in your browser.</p>
+                </a>
+            </div>
+        </section>
+<!-- 
+        <section id="cognitive-profile">
+            <h2 class="section-title">Cognitive Profile</h2>
+            <div class="box">
+                <p>My last recorded IQ is 138, which account for 0.6 percent of world population.</p>
+                    
+                <div class="iq-container">
+                    <div class="iq-text-side">
+                        
+                        <div class="iq-score rgb-word">IQ 138</div>
+                        <span class="iq-desc">Top 0.6% of population</span>
+                    </div>
+                    <div class="iq-graph-side">
+                        <svg viewBox="0 0 300 120" class="bell-curve">
+                            <defs>
+                                <linearGradient id="svg-rgb-gradient" x1="0" y1="120" x2="0" y2="0" gradientUnits="userSpaceOnUse" spreadMethod="repeat">
+                                    <stop offset="0%" stop-color="rgb(255, 0, 0)" />
+                                    <stop offset="33%" stop-color="rgb(0, 255, 0)" />
+                                    <stop offset="66%" stop-color="rgb(0, 0, 255)" />
+                                    <stop offset="100%" stop-color="rgb(255, 0, 0)" />
+                                    <animate attributeName="y1" values="100%; 0%" dur="8s" repeatCount="indefinite" calcMode="linear" />
+                                    <animate attributeName="y2" values="200%; 100%" dur="8s" repeatCount="indefinite" calcMode="linear" />
+                                </linearGradient>
+                                <filter id="glow-effect" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur stdDeviation="1.2" result="blur" />
+                                    <feMerge>
+                                        <feMergeNode in="blur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            
+                            <line x1="10" y1="85" x2="290" y2="85" stroke="#222222" stroke-width="1" />
+
+                            <line x1="70" y1="85" x2="70" y2="20" stroke="#333333" stroke-width="1" stroke-dasharray="2 2" opacity="0.3" />
+                            <line x1="110" y1="85" x2="110" y2="20" stroke="#333333" stroke-width="1" stroke-dasharray="2 2" opacity="0.3" />
+                            <line x1="150" y1="85" x2="150" y2="15" stroke="#333333" stroke-width="1" stroke-dasharray="2 2" opacity="0.3" />
+                            <line x1="190" y1="85" x2="190" y2="20" stroke="#333333" stroke-width="1" stroke-dasharray="2 2" opacity="0.3" />
+                            <line x1="230" y1="85" x2="230" y2="20" stroke="#333333" stroke-width="1" stroke-dasharray="2 2" opacity="0.3" />
+
+                            <text x="70" y="98" font-size="8" text-anchor="middle" fill="#666666">70</text>
+                            <text x="110" y="98" font-size="8" text-anchor="middle" fill="#666666">85</text>
+                            <text x="150" y="98" font-size="8" text-anchor="middle" fill="#666666">100</text>
+                            <text x="190" y="98" font-size="8" text-anchor="middle" fill="#666666">115</text>
+                            <text x="230" y="98" font-size="8" text-anchor="middle" fill="#666666">130</text>
+
+                            <text x="40" y="112" font-size="7" text-anchor="middle" fill="#444444">2.2%</text>
+                            <text x="90" y="112" font-size="7" text-anchor="middle" fill="#444444">13.6%</text>
+                            <text x="130" y="112" font-size="7" text-anchor="middle" fill="#444444">34.1%</text>
+                            <text x="170" y="112" font-size="7" text-anchor="middle" fill="#444444">34.1%</text>
+                            <text x="210" y="112" font-size="7" text-anchor="middle" fill="#444444">13.6%</text>
+                            <text x="250" y="112" font-size="7" text-anchor="middle" fill="#444444">2.2%</text>
+
+                            <path d="M 10 85 C 50 85 85 77 110 46 C 122 31 138 15 150 15 C 162 15 178 31 190 46 C 215 77 250 85 290 85" fill="none" stroke="#222222" stroke-width="1.5" stroke-linecap="round" />
+
+                            <path d="M 10 85 C 50 85 85 77 110 46 C 122 31 138 15 150 15 C 162 15 178 31 190 46 C 208 68 228 80 251 82.5 L 251 85 Z" fill="url(#svg-rgb-gradient)" opacity="0.05" />
+
+                            <path d="M 10 85 C 50 85 85 77 110 46 C 122 31 138 15 150 15 C 162 15 178 31 190 46 C 215 77 250 85 290 85" fill="none" stroke="url(#svg-rgb-gradient)" stroke-width="2.2" stroke-linecap="round" filter="url(#glow-effect)" />
+
+                            <line x1="251" y1="85" x2="251" y2="60" stroke="#444444" stroke-width="1" />
+                            <text x="251" y="46" font-size="8.5" font-weight="bold" text-anchor="middle" fill="#ffffff">138</text>
+                            <text x="251" y="54" font-size="7.5" font-weight="bold" text-anchor="middle" fill="url(#svg-rgb-gradient)">Top 0.6%</text>
+
+                            <circle cx="251" cy="82.5" r="3.5" fill="url(#svg-rgb-gradient)" />
+                            <circle cx="251" cy="82.5" r="8" fill="none" stroke="url(#svg-rgb-gradient)" stroke-width="1" class="graph-marker-pulse" />
+                        </svg>
+                    </div>
+                </div>
+                <p>My ultimate goal in life is to be a contributor in the development of computer technology, helping a vast number of people with my inventions, aiming to be the absolute best at my chosen sub-field.</p>
+            </div>
+        </section> -->
+
+        <footer class="contact-footer">
+            <div class="footer-sections">
+                <div class="footer-section">
+                    <h3 class="footer-title">My Contacts</h3>
+                    <div class="footer-links">
+                        <a href="https://wa.me/6281398575252" target="_blank" title="WhatsApp"><img src="assets/whatsapp_logo.png" alt="WhatsApp"></a>
+                        <a href="mailto:fitranhp@gmail.com" title="Email"><img src="assets/gmail_logo.png" alt="Email" class="logo-gmail"></a>
+                        <a href="https://www.linkedin.com/in/muhammad-fitran-ramadhan/?locale=en_US" target="_blank" title="LinkedIn"><img src="assets/linkedin_logo.png" alt="LinkedIn"></a>
+                        <a href="https://www.instagram.com/m._fitran/" target="_blank" title="Instagram"><img src="assets/instagram_logo.jpeg" alt="Instagram"></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3 class="footer-title">Professional Profiles</h3>
+                    <div class="footer-links">
+                        <a href="https://github.com/MFitran" target="_blank" title="GitHub"><img src="assets/github_logo.png" alt="GitHub" class="logo-github"></a>
+                        <a href="https://leetcode.com/u/Fitran/" target="_blank" title="LeetCode"><img src="assets/leetcode_logo.png" alt="LeetCode"></a>
+                        <a href="https://scholar.google.com/citations?user=GgtQvKgAAAAJ&hl=en" target="_blank" title="Google Scholar"><img src="assets/google_scholar_logo.png" alt="Google Scholar"></a>
+                        <a href="https://www.researchgate.net/profile/Muhammad-Ramadhan-207" target="_blank" title="ResearchGate"><img src="assets/researchgate_logo.png" alt="ResearchGate"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-text">Muhammad Fitran Ramadhan &copy; 2026</div>
+        </footer>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

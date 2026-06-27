@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* --- STRUCTURAL INITIALIZATION & CORE RESET --- */
+/* --- UTILITY & STRUCTURAL RESET --- */
 * {
     margin: 0;
     padding: 0;
@@ -8,8 +8,8 @@
 }
 
 body {
-    padding-top: 105px;
-    padding-bottom: 40px;
+    padding-top: 95px;
+    padding-bottom: 60px;
     background-color: #000000;
     color: #E0E0E0;
     font-family: 'Inter', sans-serif;
@@ -21,59 +21,76 @@ body {
 h2 {
     font-weight: 700;
     font-size: 28px;
-    margin-bottom: 8px;
 }
 
-/* --- DEPLOYMENT WRAPPER SYSTEM --- */
+/* --- CONTAINER --- */
 .container {
     max-width: 1200px;
     width: 90%;
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
-/* --- THE SYSTEM DESIGN CORNER BOX --- */
-.box {
-    border: 1px solid #121212;
-    border-radius: 20px; 
-    padding: 2rem;
-    background: #020202;
-}
-
-.hero-intro {
-    min-height: 110px;
-    margin-bottom: 25px;
-}
-
-/* --- FIXED STICKY FIXED HEADER ENGINE --- */
+/* --- HEADER / NAVBAR --- */
 header {
     width: 100%;
     border-bottom: 1px solid #121212;
     position: fixed;
     top: 0;
     left: 0;
-    background: #000000; 
+    background: #000000;
     z-index: 1000;
 }
 
 .header-content {
-    height: 75px;
+    height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 40px; 
+    padding: 0 40px;
     position: relative;
 }
 
-.logo-pic-fallback {
-    width: 35px;
-    height: 35px;
-    border: 1px solid #121212;
-    border-radius: 50%;
-    display: flex;
+.home-btn-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.home-text {
+    font-weight: 700;
+}
+
+.logo-pic-wrapper {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    background: #090909;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid #121212;
+    background: linear-gradient(
+      to top,
+      rgb(255, 0, 0),
+      rgb(0, 0, 255),
+      rgb(0, 255, 0),
+      rgb(255, 0, 0)
+    );
+    background-size: auto 200%;
+    animation: rgb-gradient-animation 8s linear infinite;
+    box-shadow: inset 0 0 0 1px #000000;
+}
+
+.logo-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background-color: transparent;
 }
 
 .nav-title {
@@ -85,9 +102,15 @@ header {
   white-space: nowrap;
 }
 
-/* --- PREMIUM SYSTEM NEON GRADIENT MODULATION --- */
+/* --- GRADIENT TEXT --- */
 .rgb-word {
-  background: linear-gradient(to top, #ff0000, #0000ff, #00ff00, #ff0000);
+  background: linear-gradient(
+    to top,
+    rgb(255, 0, 0),
+    rgb(0, 0, 255),
+    rgb(0, 255, 0),
+    rgb(255, 0, 0)
+  );
   background-size: auto 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -100,71 +123,114 @@ header {
   100% { background-position: center 200%; }
 }
 
-/* --- INTERACTIVE ACTION TILE UTILITIES --- */
 .hotkeys-placeholder {
     display: flex;
     gap: 10px;
 }
 
 .hotkey-circle {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border: 1px solid #121212;
     border-radius: 50%;
-    background-color: #111;
+    background-color: #E0E0E0;
+    transition: transform 0.2s ease;
+    box-sizing: border-box !important;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
-    transition: transform 0.2s ease, border-color 0.2s;
+}
+
+.hotkey-circle img {
+    width: 12px !important;
+    height: 12px !important;
 }
 
 .hotkey-circle:hover {
     transform: scale(1.15);
-    border-color: #333;
 }
 
-/* --- TWIN SPLIT WEB DASHBOARD LAYOUT SYSTEM --- */
+/* --- BOXES --- */
+.box {
+    border: 1px solid #121212;
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.hero-intro {
+    min-height: 120px;
+    margin-bottom: 12px;
+}
+
+section#traffic-analysis {
+    display: grid;
+    gap: 12px;
+}
+
+/* --- DASHBOARD GRID --- */
 .dashboard-grid-2col {
     display: grid;
     grid-template-columns: 1fr 1.2fr;
-    gap: 25px;
+    gap: 16px;
 }
 
 .terminal-panel {
     background: #040404;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
     max-height: 600px;
     overflow-y: auto;
+    padding: 20px 18px 18px;
     scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.14) rgba(255,255,255,0.04);
+}
+
+.terminal-panel::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-panel::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
+}
+
+.terminal-panel::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.14);
+    border-radius: 999px;
 }
 
 .terminal-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
     border-bottom: 1px solid #121212;
-    padding-bottom: 12px;
+    padding: 16px 0 12px;
+    background: #040404;
 }
 
 #last-update-tag {
     font-size: 11px;
-    color: #555;
-    font-weight: bold;
-    letter-spacing: 0.05em;
+    color: #8f93a1;
+    font-weight: 600;
+    letter-spacing: 0.08em;
 }
 
 #traffic-nodes-container {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    padding-block: 16px;
 }
 
 .loading-state {
-    color: #555;
+    color: #6f7380;
     text-align: center;
     font-size: 15px;
     padding: 20px 0;
@@ -181,10 +247,70 @@ header {
 #traffic-map {
     width: 100%;
     height: 100%;
+    min-height: 600px;
     background: #000;
 }
 
-/* --- FOOTER ATTACHMENT DEFINITION --- */
+.footer-sections {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-title {
+    font-size: 20px;
+    color: #E0E0E0;
+    margin: 0;
+    font-weight: bold;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.footer-links a {
+    display: inline-block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.footer-links a:hover {
+    transform: translateY(-3px);
+    opacity: 0.8;
+}
+
+.footer-links img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 6px;
+    background-color: transparent;
+}
+
+img.logo-gmail {
+    background-color: #FFFFFF;
+    object-fit: contain;
+    padding: 2px;
+}
+
+img.logo-github {
+    background-color: #FFFFFF;
+}
+
+/* --- FOOTER --- */
 footer.contact-footer {
     text-align: center;
     margin-top: 60px;
@@ -195,9 +321,10 @@ footer.contact-footer {
 
 .footer-text {
     font-size: 14px;
+    margin-top: 16px;
 }
 
-/* --- GEOMETRICAL LEAFLET BLEND OVERRIDES --- */
+/* --- LEAFLET --- */
 .leaflet-container {
     background: #000000 !important;
 }
@@ -208,7 +335,7 @@ footer.contact-footer {
     font-family: 'Inter', sans-serif;
 }
 
-/* --- MOBILE LANDSCAPE PORTRAIT CONFIGURATION ENGINE --- */
+/* --- RESPONSIVE --- */
 @media (max-width: 900px) {
     body { padding-top: 90px; font-size: 16px; }
     .dashboard-grid-2col { grid-template-columns: 1fr; gap: 20px; }

@@ -31,24 +31,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!client) throw new Error("Supabase authenticated initialization matrix failed.");
 
             // Download snapshot payload directly from your storage bucket
-            const { data, error } = await client
-                .storage
-                .from('jakarta-traffic-data')
-                .download('latest_traffic.json');
+            const { data: realtimeData, error: realtimeError } = await client
+                .from('jakarta_traffic_logs')
+                .select('*')
+                .order('fetched_at', { ascending: false })
+                .limit(10);
 
-            if (error) {
-                if (error.statusCode === "404" || error.message.includes("not found")) {
-                    console.warn("Telemetry file not found in bucket. Awaiting initial Python run...");
-                    document.getElementById('traffic-nodes-container').innerHTML = 
-                        '<div class="loading-state" style="color: #F9AB00; padding: 20px; text-align: center;">Awaiting initial script execution...</div>';
-                    return;
-                }
-                throw error;
+            if (realtimeError) {
+                console.error("Error fetching real-time data:", realtimeError);
+                return;
             }
+            
+            const records = realtimeData;
 
-            const textContent = await data.text();
-            const records = JSON.parse(textContent);
-
+            // Subscribe to real-time changes
+            client
+                .channel('jakarta_traffic_channel')
+                .on('postgres_changes', 
+                    { event: '*', schema: 'public', table: 'jakarta_traffic_logs' }, 
+                    payload => {
+                        console.log('Change received!', payload);
+                        // Re-fetch and re-render data on change
+                        streamLiveTrafficMatrix();
+                    }
+                )
+                .subscribe();
             const panel = document.getElementById('traffic-nodes-container');
             panel.innerHTML = '';
             trafficVectorGroup.clearLayers();
@@ -62,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             records.sort((x, y) => x.road_name.localeCompare(y.road_name));
             
             const lastUpdate = records[0].fetched_at;
-            const clock = lastUpdate ? new Date(lastUpdate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+            const clock = lastUpdate ? new Date(lastUpdate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
             document.getElementById('last-update-tag').innerText = `UPDATED AT ${clock} WIB`;
 
             // 🚀 LOOP ENTRIES TO GENERATE LANDMARK TELEMETRY BUBBLES
@@ -149,5 +156,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     streamLiveTrafficMatrix();
-    setInterval(streamLiveTrafficMatrix, 300000);
 });

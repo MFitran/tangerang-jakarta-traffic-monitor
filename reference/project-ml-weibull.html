@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid ML-Weibull RUL | Fitran</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/profile_picture.jpg">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="home-btn-container">
+                <span class="home-text">Home</span>
+                <span class="logo-pic-wrapper"><img src="assets/profile_picture_t.png" alt="Fitran Profile" class="logo-pic"></span>
+            </a>
+            <div class="nav-title"> 
+                <span class="rgb-word desktop-title">Muhammad Fitran Ramadhan</span>
+                <span class="rgb-word mobile-title">Fitran</span>
+            </div>
+            <div class="hotkeys-placeholder">
+                <div class="hotkey-circle" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="cursor: pointer; display: flex; justify-content: center; align-items: center;" title="Go to Top"><img src="assets/top_icon.png" alt="Top" style="width: 14px; height: 14px;"></div>
+                <div class="hotkey-circle" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" style="cursor: pointer; display: flex; justify-content: center; align-items: center;" title="Go to Bottom"><img src="assets/bottom_icon.png" alt="Bottom" style="width: 14px; height: 14px;"></div>
+                <div class="hotkey-circle" onclick="location.reload()" style="cursor: pointer; display: flex; justify-content: center; align-items: center;" title="Refresh"><img src="assets/refresh_icon.png" alt="Refresh" style="width: 12px; height: 12px;"></div>
+            </div>
+        </div>
+    </header>
+
+
+
+    <div id="page-wrap">
+        <main class="container">
+        <style>
+            /* --- PROJECT-SPECIFIC PREMIUM STYLES --- */
+            .project-card {
+                background: transparent;
+                border: 1px solid #121212;
+                border-radius: 20px;
+                padding: 40px;
+                margin-top: 40px;
+                margin-bottom: 40px;
+            }
+            .project-section-title {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 25px;
+                color: #fff;
+                border-bottom: 1px solid #222;
+                padding-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .project-badge-container {
+                margin: 20px 0;
+            }
+            .tech-badge {
+                display: inline-block;
+                background: #111;
+                border: 1px solid #2a2a2a;
+                color: #b0b0b0;
+                padding: 6px 14px;
+                font-size: 13px;
+                border-radius: 20px;
+                margin-right: 8px;
+                margin-bottom: 8px;
+                font-weight: 600;
+                transition: border-color 0.2s, color 0.2s;
+            }
+            .tech-badge:hover {
+                border-color: #3366cc;
+                color: #fff;
+            }
+            .prob-sol-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                margin-top: 20px;
+            }
+            @media (max-width: 768px) {
+                .prob-sol-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .ps-card {
+                background: rgba(10, 10, 10, 0.6);
+                border: 1px solid #151515;
+                padding: 24px;
+                border-radius: 12px;
+            }
+            .ps-card h3 {
+                font-size: 20px;
+                margin-bottom: 12px;
+                color: #fff;
+            }
+            
+            /* --- MATH EXPLORER & SVG CHART --- */
+            .math-explorer-grid {
+                display: grid;
+                grid-template-columns: 1.2fr 1fr;
+                gap: 30px;
+            }
+            @media (max-width: 900px) {
+                .math-explorer-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .math-desc {
+                padding-right: 15px;
+            }
+            .math-desc p {
+                margin-bottom: 15px;
+            }
+            .widget-container {
+                background: #080808;
+                border: 1px solid #1a1a1a;
+                border-radius: 12px;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                min-height: 420px;
+            }
+            .slider-group {
+                margin-bottom: 15px;
+            }
+            .slider-group label {
+                display: flex;
+                justify-content: space-between;
+                color: #b0b0b0;
+                font-size: 14px;
+                margin-bottom: 6px;
+            }
+            .slider-group input[type="range"] {
+                width: 100%;
+                accent-color: #3366cc;
+                background: #222;
+                height: 6px;
+                border-radius: 3px;
+                outline: none;
+            }
+            .chart-area {
+                background: #000;
+                border: 1px solid #151515;
+                border-radius: 8px;
+                margin-top: 15px;
+                padding: 8px;
+            }
+            .chart-legend {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                font-size: 12px;
+                margin-top: 8px;
+            }
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .legend-color {
+                width: 12px;
+                height: 12px;
+                border-radius: 2px;
+            }
+            
+            /* --- CARD GRIDS (Uniformed findings style) --- */
+            .findings-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                margin-top: 15px;
+            }
+            .findings-grid-3 {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                margin-top: 15px;
+            }
+            @media (max-width: 900px) {
+                .findings-grid, .findings-grid-3 {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .finding-card {
+                background: rgba(10, 10, 10, 0.7);
+                border: 1px solid #151515;
+                border-radius: 12px;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                min-width: 0;
+            }
+            .finding-card-wide {
+                grid-column: span 2;
+            }
+            @media (max-width: 900px) {
+                .finding-card-wide {
+                    grid-column: span 1;
+                }
+            }
+            .finding-card h3 {
+                font-size: 18px;
+                color: #fff;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            /* --- PUBLICATIONS & DATASETS --- */
+            .publications-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 15px;
+            }
+            .pub-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: rgba(12, 12, 12, 0.8);
+                border: 1px solid #1c1c1c;
+                padding: 20px 24px;
+                border-radius: 10px;
+                transition: transform 0.2s, border-color 0.2s;
+            }
+            .pub-item:hover {
+                transform: translateX(6px);
+                border-color: #333;
+            }
+            .pub-info {
+                display: flex;
+                align-items: center;
+                gap: 18px;
+            }
+            .pub-icon-doc {
+                width: 38px;
+                height: 38px;
+                background: #111;
+                border: 1px solid #333;
+                border-radius: 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+            }
+            .pub-title {
+                font-weight: 600;
+                color: #fff;
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+            .pub-meta {
+                font-size: 13px;
+                color: #888;
+            }
+            .pub-download {
+                color: #fff;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 13px;
+                background: transparent;
+                border: 1px solid #444;
+                padding: 8px 16px;
+                border-radius: 20px;
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .pub-download:hover {
+                background: #fff;
+                color: #000;
+                border-color: #fff;
+            }
+            .datasets-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                margin-top: 20px;
+            }
+            @media (max-width: 768px) {
+                .datasets-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .dataset-card {
+                background: #0a0a0a;
+                border: 1px solid #151515;
+                padding: 15px 20px;
+                border-radius: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-decoration: none;
+                color: inherit;
+                transition: border-color 0.2s;
+            }
+            .dataset-card:hover {
+                border-color: #3366cc;
+            }
+            .dataset-name {
+                font-weight: 600;
+                font-size: 14px;
+            }
+            .dataset-size {
+                font-size: 11px;
+                color: #666;
+            }
+            
+            /* --- CODE HIGHLIGHTING BLOCK --- */
+            pre.code-block {
+                background: #020202;
+                border: 1px solid #121212;
+                padding: 18px;
+                border-radius: 8px;
+                font-family: 'Consolas', 'Courier New', monospace;
+                font-size: 13px;
+                overflow-x: auto;
+                color: #a9b7c6;
+                margin-top: 15px;
+                line-height: 1.5;
+            }
+            pre.code-block code {
+                color: #e0e0e0;
+            }
+            .c-comment { color: #57a64a; }
+            .c-keyword { color: #569cd6; }
+            .c-string { color: #d69d85; }
+            .c-function { color: #dcdcaa; }
+            .c-variable { color: #9cdcfe; }
+
+            /* ===================================================
+               MOBILE / PORTRAIT RESPONSIVE — max-width: 768px
+               =================================================== */
+            @media (max-width: 768px) {
+
+                /* Prevent overflow bleed from any child */
+                #page-wrap { overflow-x: hidden; }
+                .project-card {
+                    padding: 20px 16px;
+                    margin-top: 20px;
+                    margin-bottom: 20px;
+                    border-radius: 14px;
+                }
+                .project-section-title { font-size: 18px !important; }
+
+                /* Mobile font size and badge overrides are delegated to assets/css/style.css */
+
+                /* --- Equation containers: scroll horizontally instead of bleeding --- */
+                .MathJax_Display, mjx-container[display="true"] {
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    max-width: 100%;
+                    display: block !important;
+                }
+                /* Both border colours used across equation wrapper divs in this page */
+                div[style*="border: 1px solid #1c1c1c"],
+                div[style*="border:1px solid #1c1c1c"],
+                div[style*="border: 1px solid #151515"],
+                div[style*="border:1px solid #151515"] {
+                    overflow-x: auto;
+                }
+
+                /* --- Publications: stack icon+text above download button --- */
+                .pub-item {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 14px;
+                }
+                .pub-download {
+                    width: 100%;
+                    text-align: center;
+                    padding: 10px;
+                    box-sizing: border-box;
+                }
+
+                /* Dataset card inline header (h4 + download button) — stack vertically */
+                div[style*="justify-content: space-between"][style*="align-items: center"] {
+                    flex-direction: column !important;
+                    align-items: flex-start !important;
+                    gap: 10px !important;
+                }
+
+                /* --- Weibull PDF/CDF widget --- */
+                .widget-container {
+                    padding: 16px 12px;
+                    min-height: auto; /* override 420px forced height */
+                }
+                .slider-group label {
+                    flex-wrap: wrap;
+                    gap: 4px;
+                }
+
+                /* --- WE Error widget: stack left (sliders) above right (chart) --- */
+                div[style*="flex-direction: row"][style*="flex-wrap: wrap"] {
+                    flex-direction: column !important;
+                    gap: 20px !important;
+                }
+                div[style*="min-width: 280px"] {
+                    min-width: 0 !important;
+                    width: 100% !important;
+                }
+                div[style*="min-width: 320px"] {
+                    min-width: 0 !important;
+                    width: 100% !important;
+                    padding: 10px !important;
+                }
+                div[style*="grid-template-columns: 1fr 1fr"] {
+                    font-size: 12px !important;
+                }
+
+                /* --- Results tables --- */
+                .result-table-wrap { overflow-x: auto; }
+
+                /* --- Finding cards --- */
+                .finding-card { padding: 16px 14px; }
+            }
+
+            /* Extra narrow (≤420px — 20:9 phones in portrait) */
+            @media (max-width: 420px) {
+                .project-card  { padding: 14px 10px; }
+                .finding-card  { padding: 12px 10px; }
+                .pub-item      { padding: 14px 12px; }
+                pre.code-block { font-size: 10.5px !important; padding: 12px; }
+                .widget-container h3 { font-size: 14px !important; }
+            }
+        </style>
+
+        <!-- Section 1: Hero & Executive Summary -->
+        <section class="project-card">
+            <h1 style="font-size: 32px; font-weight: 700; margin-bottom: 10px; color: #fff;">Hybrid Machine Learning-Weibull for Remaining Useful Life Prediction</h1>
+            <h2 style="font-size: 18px; font-weight: normal; color: #a0a0a0; margin-bottom: 20px; line-height: 1.5;">Bridging Statistical Reliability Models and Edge-Cloud Telemetry for Dynamic Remaining Useful Life (RUL) Estimation.</h2>
+            
+            <div style="margin-bottom: 25px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+                <a href="https://github.com/MFitran/predictive-maintenance-weibull-machine-learning" target="_blank" class="post-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-top: 0; padding: 6px 14px; font-size: 13px;">
+                    <img src="assets/github_logo.png" alt="GitHub" style="width: 14px; height: 14px; background: transparent; filter: invert(1);">
+                    Go to GitHub Repository
+                </a>
+            </div>
+
+            <div class="grid-2x2" style="margin-top: 25px; margin-bottom: 10px;">
+                <div class="ps-card" style="padding: 18px 22px;">
+                    <h4 style="font-size: 15px; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 8px;">Technologies & Tools</h4>
+                    <div>
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">C++</span>
+                        <span class="tech-badge">XGBoost</span>
+                        <span class="tech-badge">LightGBM</span>
+                        <span class="tech-badge">lifelines</span>
+                        <span class="tech-badge">scikit-learn</span>
+                        <span class="tech-badge">SciPy</span>
+                        <span class="tech-badge">Pandas</span>
+                        <span class="tech-badge">NumPy</span>
+                        <span class="tech-badge">ESP32-S3</span>
+                        <span class="tech-badge">Arduino IDE</span>
+                        <span class="tech-badge">OBD-II Interface</span>
+                        <span class="tech-badge">TPMS Sensors</span>
+                        <span class="tech-badge">GPS Integration</span>
+                        <span class="tech-badge">C-MAPSS Dataset</span>
+                    </div>
+                </div>
+                <div class="ps-card" style="padding: 18px 22px;">
+                    <h4 style="font-size: 15px; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 8px;">Skills & Competencies</h4>
+                    <div>
+                        <span class="tech-badge">Survival Analysis</span>
+                        <span class="tech-badge">Reliability Engineering</span>
+                        <span class="tech-badge">Machine Learning Regression</span>
+                        <span class="tech-badge">Custom Loss Functions</span>
+                        <span class="tech-badge">Embedded IoT Systems</span>
+                        <span class="tech-badge">Time-Series Data Engineering</span>
+                        <span class="tech-badge">Mathematical Optimization</span>
+                        <span class="tech-badge">Exploratory Data Analysis</span>
+                        <span class="tech-badge">ETL</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prob-sol-grid">
+                <div class="ps-card">
+                    <h3 class="rgb-word">The Problem Statement</h3>
+                    <p style="font-size: 16px; color: #c0c0c0;">Traditional Predictive Maintenance (PdM) systems rely heavily on static, historical averages for survival modeling. These rigid, time-invariant parameters fail to account for dynamic, real-time operational stressors like varying payloads, sudden throttle adjustments, and erratic environmental temperatures, leading to suboptimal or inaccurate Remaining Useful Life (RUL) predictions.</p>
+                </div>
+                <div class="ps-card">
+                    <h3 class="rgb-word">The Core Innovation</h3>
+                    <p style="font-size: 16px; color: #c0c0c0;">This framework transforms the Weibull scale parameter (\(\lambda\)) from a static characteristic lifetime into a <strong>dynamic, covariate-driven target</strong> for machine learning regression models. By coupling statistical reliability theory directly with advanced regressors, the system produces a percentage-based failure probability curve that adapts continuously to telemetry stressors.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Mathematical Foundation & Explorer -->
+        <section class="project-card" id="math-explorer">
+            <h2 class="project-section-title">Mathematical Foundation & Interactive Explorer</h2>
+            
+            <div class="math-explorer-grid">
+                <div class="math-desc">
+                    <p style="font-size: 16px; color: #ccc;">The Weibull distribution is parameterized by two essential parameters that define failure mechanics:</p>
+                    
+                    <ul style="list-style: none; padding-left: 0; margin-bottom: 25px;">
+                        <li style="margin-bottom: 15px; font-size: 16px;">
+                            <strong style="color: #ff3366;">Shape Parameter (\(k\)):</strong> Defines the failure nature over time.
+                            <ul style="margin-top: 5px; color: #aaa; padding-left: 20px; font-size: 15px;">
+                                <li>\(k < 1\): Infant mortality (decreasing failure rate).</li>
+                                <li>\(k = 1\): Random failures (constant failure rate; reduces to Exponential Distribution).</li>
+                                <li>\(k > 1\): Wear-out phase (increasing failure rate; typical in mechanical structures).</li>
+                            </ul>
+                        </li>
+                        <li style="font-size: 16px;">
+                            <strong style="color: #ffaa00;">Scale Parameter (\(\lambda\)):</strong> Denotes the characteristic life. It represents the point in time at which approximately <strong>63.2%</strong> of all test components are expected to fail, regardless of the shape parameter \(k\).
+                        </li>
+                    </ul>
+
+                    <p style="font-size: 16px; color: #ccc;">The Probability Density Function (PDF) and Cumulative Distribution Function (CDF) are represented as:</p>
+                    
+                    <!-- Latex math rendering block -->
+                    <div style="background: rgba(10, 10, 10, 0.4); padding: 15px; border-radius: 8px; border: 1px solid #151515; margin-bottom: 20px;">
+                        <p style="text-align: center; margin: 10px 0; color: #fff;">
+                            <strong>PDF:</strong> \[f(t; k, \lambda) = \frac{k}{\lambda} \left( \frac{t}{\lambda} \right)^{k-1} e^{-\left(\frac{t}{\lambda}\right)^k}\]
+                        </p>
+                        <p style="text-align: center; margin: 10px 0; color: #fff;">
+                            <strong>CDF:</strong> \[F(t; k, \lambda) = 1 - e^{-\left(\frac{t}{\lambda}\right)^k}\]
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="widget-container">
+                    <h3 style="font-size: 18px; margin-bottom: 15px; color: #fff; text-align: center;">Interactive Weibull Parameter Widget</h3>
+                    
+                    <div class="slider-group">
+                        <label for="shape-k">
+                            <span>Shape factor (\(k\))</span>
+                            <span id="k-val" style="color:#ff3366; font-weight:bold;">1.5</span>
+                        </label>
+                        <input type="range" id="shape-k" min="0.5" max="5.0" step="0.1" value="2.0" oninput="drawWeibull()">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <label for="scale-lambda">
+                            <span>Scale factor (\(\lambda\))</span>
+                            <span id="lambda-val" style="color:#ffaa00; font-weight:bold;">250</span>
+                        </label>
+                        <input type="range" id="scale-lambda" min="50" max="500" step="10" value="250" oninput="drawWeibull()">
+                    </div>
+                    
+                    <div class="chart-area">
+                        <svg id="weibull-chart" width="100%" height="220" viewBox="0 0 450 220">
+                            <defs>
+                                <linearGradient id="pdf-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#ff3366" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#ff3366" stop-opacity="0"/>
+                                </linearGradient>
+                                <linearGradient id="cdf-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#3366cc" stop-opacity="0.8"/>
+                                    <stop offset="100%" stop-color="#3366cc" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Grid & Axis Baselines -->
+                            <line x1="40" y1="190" x2="430" y2="190" stroke="#222" stroke-width="1.5"/>
+                            <line x1="40" y1="20" x2="40" y2="190" stroke="#222" stroke-width="1.5"/>
+                            
+                            <!-- Y Ticks -->
+                            <text x="32" y="25" fill="#555" font-size="9" text-anchor="end">1.0 (CDF)</text>
+                            <text x="32" y="105" fill="#555" font-size="9" text-anchor="end">0.5</text>
+                            <text x="32" y="190" fill="#555" font-size="9" text-anchor="end">0.0</text>
+                            
+                            <!-- X Ticks -->
+                            <text x="40" y="202" fill="#555" font-size="9" text-anchor="middle">0</text>
+                            <text x="137" y="202" fill="#555" font-size="9" text-anchor="middle">150</text>
+                            <text x="235" y="202" fill="#555" font-size="9" text-anchor="middle">300</text>
+                            <text x="332" y="202" fill="#555" font-size="9" text-anchor="middle">450</text>
+                            <text x="430" y="202" fill="#555" font-size="9" text-anchor="middle">600 (t)</text>
+                            
+                            <!-- Dynamic Indicator Lines -->
+                            <line id="lambda-line" x1="40" y1="20" x2="40" y2="190" stroke="#ffaa00" stroke-width="1" stroke-dasharray="3,3"/>
+                            <text id="lambda-label" x="45" y="35" fill="#ffaa00" font-size="9" font-weight="bold">λ (Scale)</text>
+                            
+                            <line id="cdf-63-line" x1="40" y1="20" x2="40" y2="20" stroke="#3366cc" stroke-width="1" stroke-dasharray="2,2"/>
+                            <text x="45" y="80" id="cdf-63-text" fill="#3366cc" font-size="8" opacity="0.8">63.2% failure point</text>
+                            
+                            <!-- Paths -->
+                            <path id="pdf-curve" d="" fill="none" stroke="#ff3366" stroke-width="2.5" stroke-linecap="round"/>
+                            <path id="cdf-curve" d="" fill="none" stroke="#3366cc" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background:#ff3366;"></div>
+                            <span style="color:#ff3366; font-weight:bold;">PDF f(t)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background:#3366cc;"></div>
+                            <span style="color:#3366cc; font-weight:bold;">CDF F(t)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Novelty Error Metrics -->
+        <section class="project-card" id="error-metrics">
+            <h2 class="project-section-title">The Novelty: Custom Weibull Error Metrics</h2>
+            
+            <p style="font-size: 16px; color: #ccc; margin-bottom: 20px;">Traditional metrics (like RMSE and MAE) evaluate prediction error based on absolute distance between point targets. This is insufficient for survivability profiles where we want to evaluate the matching of the probability density curves. Thus, custom Weibull error metrics were developed to isolate the mathematical alignment of estimated curves.</p>
+            
+            <p style="font-size: 16px; color: #ccc; margin-bottom: 30px;">These metrics calculate the area between the continuous predicted Weibull Cumulative Distribution Function (CDF) and the actual step function of the failure event (which transitions from 0 to 1 at the actual failure time \(t_{act}\)).</p>
+
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div class="finding-card">
+                    <h3>Mean Weibull Error (MWE)</h3>
+                    <p style="font-size: 14.5px; color: #aaa; margin-bottom: 12px;">Mean Weibull Error evaluates the cumulative distance of the predicted scale parameter \(\lambda\) from the actual failure point, effectively mapping standard deviation equivalents over survival profiles.</p>
+                    
+                    <div style="margin: 12px 0 20px 0; color: #fff; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; border: 1px solid #1c1c1c;">
+                        \[WE(t_{act}, \lambda, k) = \int_0^{t_{act}} F(x) dx + \int_{t_{act}}^{\infty} (1 - F(x)) dx\]
+                        \[= t_{act} + \frac{2\lambda}{k} \Gamma\left(\frac{1}{k}, \left(\frac{t_{act}}{\lambda}\right)^k\right) - \frac{\lambda}{k} \Gamma\left(\frac{1}{k}\right)\]
+                    </div>
+                    
+                    <pre class="code-block"><code><span class="c-keyword">def</span> <span class="c-function">weibull_error_dataset</span>(<span class="c-variable">x_test</span>, <span class="c-variable">x_pred</span>, <span class="c-variable">k</span>):
+    <span class="c-variable">sum_error</span> = 0
+    <span class="c-keyword">for</span> <span class="c-variable">x</span>, <span class="c-variable">lmbda</span> <span class="c-keyword">in</span> <span class="c-function">zip</span>(<span class="c-variable">x_test</span>, <span class="c-variable">x_pred</span>):
+        <span class="c-variable">sum_error</span> += <span class="c-function">weibull_error</span>(<span class="c-variable">x</span>, <span class="c-variable">lmbda</span>, <span class="c-variable">k</span>)
+    <span class="c-keyword">return</span> <span class="c-variable">sum_error</span> / <span class="c-function">len</span>(<span class="c-variable">x_test</span>)</code></pre>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Mean Quadratic Weibull Error (MQWE)</h3>
+                    <p style="font-size: 14.5px; color: #aaa; margin-bottom: 12px;">MQWE enforces high quadratic penalties for extreme anomalies, evaluating the general reliability curve deviations on outliers. It is critical for safety-critical hardware where catastrophic failures must be avoided.</p>
+                    
+                    <div style="margin: 12px 0 20px 0; color: #fff; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; border: 1px solid #1c1c1c;">
+                        \[QWE(t_{act}, \lambda, k) = \int_0^{t_{act}} F(x)^2 dx + \int_{t_{act}}^{\infty} (1 - F(x))^2 dx\]
+                        \[= t_{act} + \frac{2\lambda}{k} \Gamma\left(\frac{1}{k}, \left(\frac{t_{act}}{\lambda}\right)^k\right) - \frac{2\lambda}{k} \Gamma\left(\frac{1}{k}\right) + \frac{\lambda}{k 2^{1/k}} \Gamma\left(\frac{1}{k}\right)\]
+                    </div>
+                    
+                    <pre class="code-block"><code><span class="c-keyword">def</span> <span class="c-function">quadratic_weibull_error_dataset</span>(<span class="c-variable">x_test</span>, <span class="c-variable">x_pred</span>, <span class="c-variable">k</span>):
+    <span class="c-variable">sum_error</span> = 0
+    <span class="c-keyword">for</span> <span class="c-variable">x</span>, <span class="c-variable">lmbda</span> <span class="c-keyword">in</span> <span class="c-function">zip</span>(<span class="c-variable">x_test</span>, <span class="c-variable">x_pred</span>):
+        <span class="c-variable">sum_error</span> += <span class="c-function">weibull_error</span>(<span class="c-variable">x</span>, <span class="c-variable">lmbda</span>, <span class="c-variable">k</span>) ** 2
+    <span class="c-keyword">return</span> <span class="c-variable">sum_error</span> / <span class="c-function">len</span>(<span class="c-variable">x_test</span>)</code></pre>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Mean Directional Errors (MRWE & MLWE)</h3>
+                    <p style="font-size: 14.5px; color: #aaa; margin-bottom: 12px;">Mean Left Weibull Error (MLWE) and Mean Right Weibull Error (MRWE) are used to isolate whether a model is aggressively over-predicting or under-predicting the failure threshold.</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin: 12px 0 20px 0; color: #fff; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px; border: 1px solid #1c1c1c;">
+                        <div>
+                            <strong style="color: #ff3366; font-size: 13.5px; display: block; margin-bottom: 6px;">Mean Left Weibull Error (MLWE) - Early Failure Penalty:</strong>
+                            \[LWE(t_{act}, \lambda, k) = \int_0^{t_{act}} F(x) dx = t_{act} + \frac{\lambda}{k} \Gamma\left(\frac{1}{k}, \left(\frac{t_{act}}{\lambda}\right)^k\right) - \frac{\lambda}{k} \Gamma\left(\frac{1}{k}\right)\]
+                        </div>
+                        <div style="border-top: 1px dashed #222; padding-top: 15px; margin-top: 5px;">
+                            <strong style="color: #ffaa00; font-size: 13.5px; display: block; margin-bottom: 6px;">Mean Right Weibull Error (MRWE) - Late Failure Penalty:</strong>
+                            \[RWE(t_{act}, \lambda, k) = \int_{t_{act}}^{\infty} (1 - F(x)) dx = \frac{\lambda}{k} \Gamma\left(\frac{1}{k}, \left(\frac{t_{act}}{\lambda}\right)^k\right)\]
+                        </div>
+                    </div>
+                    
+                    <pre class="code-block"><code><span class="c-keyword">def</span> <span class="c-function">left_weibull_error</span>(<span class="c-variable">x</span>, <span class="c-variable">lmbda</span>, <span class="c-variable">k</span>):
+    <span class="c-variable">lmbda</span> = <span class="c-variable">lmbda</span> <span class="c-keyword">if</span> <span class="c-variable">lmbda</span> > 0 <span class="c-keyword">else</span> 1e-12
+    <span class="c-variable">s</span> = 1.0 / <span class="c-variable">k</span>
+    <span class="c-variable">z</span> = (<span class="c-variable">x</span> / <span class="c-variable">lmbda</span>) ** <span class="c-variable">k</span>
+    <span class="c-variable">gamma_s</span> = <span class="c-function">gamma</span>(<span class="c-variable">s</span>)
+    <span class="c-variable">l_gamma</span> = <span class="c-function">gammaincc</span>(<span class="c-variable">s</span>, <span class="c-variable">z</span>) * <span class="c-variable">gamma_s</span>
+    <span class="c-variable">l_gamma_0</span> = <span class="c-function">gammaincc</span>(<span class="c-variable">s</span>, 0) * <span class="c-variable">gamma_s</span>
+    <span class="c-keyword">return</span> <span class="c-variable">x</span> + (<span class="c-variable">lmbda</span> * <span class="c-variable">l_gamma</span> / <span class="c-variable">k</span>) - (<span class="c-variable">lmbda</span> * <span class="c-variable">l_gamma_0</span> / <span class="c-variable">k</span>)
+ 
+<span class="c-keyword">def</span> <span class="c-function">right_weibull_error</span>(<span class="c-variable">x</span>, <span class="c-variable">lmbda</span>, <span class="c-variable">k</span>):
+    <span class="c-variable">lmbda</span> = <span class="c-variable">lmbda</span> <span class="c-keyword">if</span> <span class="c-variable">lmbda</span> > 0 <span class="c-keyword">else</span> 1e-12
+    <span class="c-variable">s</span> = 1.0 / <span class="c-variable">k</span>
+    <span class="c-variable">z</span> = (<span class="c-variable">x</span> / <span class="c-variable">lmbda</span>) ** <span class="c-variable">k</span>
+    <span class="c-variable">gamma_s</span> = <span class="c-function">gamma</span>(<span class="c-variable">s</span>)
+    <span class="c-variable">l_gamma</span> = <span class="c-function">gammaincc</span>(<span class="c-variable">s</span>, <span class="c-variable">z</span>) * <span class="c-variable">gamma_s</span>
+    <span class="c-keyword">return</span> <span class="c-variable">lmbda</span> * <span class="c-variable">l_gamma</span> / <span class="c-variable">k</span></code></pre>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Scipy Integration & Core Math</h3>
+                    <p style="font-size: 14.5px; color: #aaa; margin-bottom: 12px;">Calculations use Scipy's special incomplete gamma functions to evaluate the probability densities dynamically on every telemetry step.</p>
+                    
+                    <pre class="code-block"><code><span class="c-keyword">from</span> <span class="c-variable">scipy.special</span> <span class="c-keyword">import</span> <span class="c-variable">gamma</span>, <span class="c-variable">gammaincc</span>
+ 
+<span class="c-keyword">def</span> <span class="c-function">weibull_error</span>(<span class="c-variable">x</span>, <span class="c-variable">lmbda</span>, <span class="c-variable">k</span>):
+    <span class="c-variable">lmbda</span> = <span class="c-variable">lmbda</span> <span class="c-keyword">if</span> <span class="c-variable">lmbda</span> > 0 <span class="c-keyword">else</span> 1e-12
+    <span class="c-variable">s</span> = 1.0 / <span class="c-variable">k</span>
+    <span class="c-variable">z</span> = (<span class="c-variable">x</span> / <span class="c-variable">lmbda</span>) ** <span class="c-variable">k</span>
+    <span class="c-variable">gamma_s</span> = <span class="c-function">gamma</span>(<span class="c-variable">s</span>)
+    <span class="c-variable">l_gamma</span> = <span class="c-function">gammaincc</span>(<span class="c-variable">s</span>, <span class="c-variable">z</span>) * <span class="c-variable">gamma_s</span>
+    <span class="c-variable">l_gamma_0</span> = <span class="c-function">gammaincc</span>(<span class="c-variable">s</span>, 0) * <span class="c-variable">gamma_s</span>
+    <span class="c-keyword">return</span> <span class="c-variable">x</span> + (2 * <span class="c-variable">lmbda</span> * <span class="c-variable">l_gamma</span> / <span class="c-variable">k</span>) - (<span class="c-variable">lmbda</span> * <span class="c-variable">l_gamma_0</span> / <span class="c-variable">k</span>)</code></pre>
+                </div>
+
+                <div class="finding-card" style="margin-top: 15px; gap: 15px;">
+                    <h3 style="font-size: 18px; margin-bottom: 5px; color: #fff; text-align: center;">Interactive Weibull Error Explorer</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 10px; text-align: center;">Adjust the telemetry failure target and the model's predicted parameters to see how errors are distributed.</p>
+                    
+                    <div style="display: flex; flex-direction: row; gap: 35px; align-items: stretch; flex-wrap: wrap; margin-top: 10px; width: 100%;">
+                        <!-- Left side: Sliders and readouts -->
+                        <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px;">
+                            <div style="display: flex; flex-direction: column; gap: 18px;">
+                                <div class="slider-group">
+                                    <label for="actual-t" style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px;">
+                                        <span>Actual Failure Time (\(t_{act}\))</span>
+                                        <span id="act-t-val" style="color:#00ffcc; font-weight:bold;">200</span>
+                                    </label>
+                                    <input type="range" id="actual-t" min="50" max="500" step="10" value="200" oninput="drawWeibullError()" style="width: 100%;">
+                                </div>
+
+                                <div class="slider-group">
+                                    <label for="pred-k" style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px;">
+                                        <span>Predicted Shape factor (\(k_{pred}\))</span>
+                                        <span id="pred-k-val" style="color:#ff3366; font-weight:bold;">2.0</span>
+                                    </label>
+                                    <input type="range" id="pred-k" min="0.5" max="5.0" step="0.1" value="2.0" oninput="drawWeibullError()" style="width: 100%;">
+                                </div>
+                                
+                                <div class="slider-group">
+                                    <label for="pred-lambda" style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px;">
+                                        <span>Predicted Scale factor (\(\lambda_{pred}\))</span>
+                                        <span id="pred-lambda-val" style="color:#ffaa00; font-weight:bold;">250</span>
+                                    </label>
+                                    <input type="range" id="pred-lambda" min="50" max="500" step="10" value="250" oninput="drawWeibullError()" style="width: 100%;">
+                                </div>
+                            </div>
+
+                            <!-- Interactive values readouts -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 13px; color: #aaa; background: rgba(0,0,0,0.4); padding: 12px 15px; border-radius: 8px; border: 1px solid #1c1c1c;">
+                                <div>LWE: <span id="lwe-readout" style="color: #ff3366; font-weight: bold;">0.00</span></div>
+                                <div>RWE: <span id="rwe-readout" style="color: #ffaa00; font-weight: bold;">0.00</span></div>
+                                <div>WE: <span id="we-readout" style="color: #fff; font-weight: bold;">0.00</span></div>
+                                <div>QWE: <span id="qwe-readout" style="color: #9c27b0; font-weight: bold;">0.00</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Right side: SVG chart and legends -->
+                        <div style="flex: 1.2; min-width: 320px; display: flex; flex-direction: column; gap: 15px; background: #000; padding: 15px; border-radius: 8px; border: 1px solid #1c1c1c;">
+                            <div class="chart-area" style="background:#000; width: 100%;">
+                                <svg id="error-chart" width="100%" height="220" viewBox="0 0 450 220">
+                                    <!-- Shaded Error Area Paths -->
+                                    <path id="lwe-area" d="" fill="rgba(255, 51, 102, 0.2)" stroke="none"/>
+                                    <path id="rwe-area" d="" fill="rgba(255, 170, 0, 0.2)" stroke="none"/>
+                                    
+                                    <!-- Grid & Axis Baselines -->
+                                    <line x1="40" y1="190" x2="430" y2="190" stroke="#222" stroke-width="1.5"/>
+                                    <line x1="40" y1="20" x2="40" y2="190" stroke="#222" stroke-width="1.5"/>
+                                    
+                                    <!-- Y Ticks -->
+                                    <text x="32" y="25" fill="#555" font-size="9" text-anchor="end">1.0 (CDF)</text>
+                                    <text x="32" y="105" fill="#555" font-size="9" text-anchor="end">0.5</text>
+                                    <text x="32" y="190" fill="#555" font-size="9" text-anchor="end">0.0</text>
+                                    
+                                    <!-- X Ticks -->
+                                    <text x="40" y="202" fill="#555" font-size="9" text-anchor="middle">0</text>
+                                    <text x="137" y="202" fill="#555" font-size="9" text-anchor="middle">150</text>
+                                    <text x="235" y="202" fill="#555" font-size="9" text-anchor="middle">300</text>
+                                    <text x="332" y="202" fill="#555" font-size="9" text-anchor="middle">450</text>
+                                    <text x="430" y="202" fill="#555" font-size="9" text-anchor="middle">600 (t)</text>
+                                    
+                                    <!-- Dynamic Indicator Lines -->
+                                    <line id="actual-t-line" x1="40" y1="20" x2="40" y2="190" stroke="#00ffcc" stroke-width="1" stroke-dasharray="3,3"/>
+                                    
+                                    <!-- Curves -->
+                                    <path id="pred-cdf-curve" d="" fill="none" stroke="#3366cc" stroke-width="2" stroke-linecap="round"/>
+                                    <path id="actual-step-curve" d="" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="1,0"/>
+                                </svg>
+                            </div>
+                            
+                            <div class="chart-legend" style="margin-top: 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                                <div class="legend-item" style="display: flex; align-items: center; gap: 6px;">
+                                    <div class="legend-color" style="background:#3366cc; height: 3px; width: 12px; border-radius: 0;"></div>
+                                    <span style="color:#b0b0b0; font-size: 11px;">Pred CDF</span>
+                                </div>
+                                <div class="legend-item" style="display: flex; align-items: center; gap: 6px;">
+                                    <div class="legend-color" style="background:#fff; height: 3px; width: 12px; border-radius: 0;"></div>
+                                    <span style="color:#b0b0b0; font-size: 11px;">Actual Failure</span>
+                                </div>
+                                <div class="legend-item" style="display: flex; align-items: center; gap: 6px;">
+                                    <div class="legend-color" style="background:rgba(255, 51, 102, 0.3); height: 10px; width: 10px; border-radius: 2px;"></div>
+                                    <span style="color:#b0b0b0; font-size: 11px;">LWE (Early)</span>
+                                </div>
+                                <div class="legend-item" style="display: flex; align-items: center; gap: 6px;">
+                                    <div class="legend-color" style="background:rgba(255, 170, 0, 0.3); height: 10px; width: 10px; border-radius: 2px;"></div>
+                                    <span style="color:#b0b0b0; font-size: 11px;">RWE (Late)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Applied Project I (Tires) -->
+        <section class="project-card" id="tire-system">
+            <h2 class="project-section-title">Applied Project I: Edge-Cloud Tire Degradation System</h2>
+            
+            <p style="font-size: 16px; color: #ccc; margin-bottom: 20px;">This project maps real-time telemetry captured via a custom gateway board on a moving vehicle into predictive tyre failure curves. The workflow follows a clean vertical architecture:</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 24px;">
+                <div class="finding-card">
+                    <h3>IoT Edge Gateway & Telemetry</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 12px;">Data is captured on the vehicle using an ESP32-S3 microcontroller acting as an edge gateway. Live sensor packages collect TPMS data (tyre pressures and temperatures), OBD-II diagnostics (engine load and current speeds), and spatial GPS logs to track high-accuracy mileage.</p>
+                    <div style="text-align: center;">
+                        <img src="assets/esp32_edge_architecture.png" alt="ESP32-S3 Gateway Architecture" style="max-width: 500px; width: 100%; height: auto; border: 1px solid #222; border-radius: 8px; margin: 15px auto; display: block;">
+                    </div>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Real-World Data Engineering & Preprocessing</h3>
+                    <p style="font-size: 14.5px; color: #aaa; margin-bottom: 15px;">Real-world telemetry gathered from IoT microcontrollers is highly asynchronous, noisy, and prone to packet drops. A comprehensive mathematical and data preprocessing pipeline was engineered to clean, smooth, and transform the raw sensor data:</p>
+                    
+                    <ul style="list-style: none; padding-left: 0; margin-bottom: 20px; font-size: 14px; color: #ccc;">
+                        <li style="margin-bottom: 20px;">
+                            <strong>1. Spatial Outlier Detection (IQR Bounds):</strong>
+                            Erratic coordinate jumps due to temporary GPS signal loss or multipath propagation are detected and filtered using the Interquartile Range (IQR) method:
+                            <div style="margin: 8px 0; text-align: center; color: #fff; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                \[IQR = Q_3 - Q_1 \quad \implies \quad \text{Valid Range} = [Q_1 - 1.5 \times IQR, \; Q_3 + 1.5 \times IQR]\]
+                            </div>
+                            <pre class="code-block" style="font-size: 11px; padding: 10px; margin-top: 10px;"><code><span class="c-keyword">def</span> <span class="c-function">delete_outlier_gps</span>(<span class="c-variable">df</span>):
+    <span class="c-variable">df_copy</span> = <span class="c-variable">df</span>.<span class="c-function">copy</span>()
+    <span class="c-keyword">for</span> <span class="c-variable">col_name</span> <span class="c-keyword">in</span> [<span class="c-string">'latitude'</span>, <span class="c-string">'longitude'</span>]:
+        <span class="c-variable">Q1</span> = <span class="c-variable">df</span>.<span class="c-function">loc</span>[:, <span class="c-variable">col_name</span>].<span class="c-function">quantile</span>(0.25)
+        <span class="c-variable">Q3</span> = <span class="c-variable">df</span>.<span class="c-function">loc</span>[:, <span class="c-variable">col_name</span>].<span class="c-function">quantile</span>(0.75)
+        <span class="c-variable">IQR</span> = <span class="c-variable">Q3</span> - <span class="c-variable">Q1</span>
+        <span class="c-variable">lower_bound</span> = <span class="c-variable">Q1</span> - 1.5 * <span class="c-variable">IQR</span>
+        <span class="c-variable">upper_bound</span> = <span class="c-variable">Q3</span> + 1.5 * <span class="c-variable">IQR</span>
+        <span class="c-variable">df_copy</span> = <span class="c-variable">df_copy</span>[(<span class="c-variable">df_copy</span>[<span class="c-variable">col_name</span>] >= <span class="c-variable">lower_bound</span>) & (<span class="c-variable">df_copy</span>[<span class="c-variable">col_name</span>] <= <span class="c-variable">upper_bound</span>)]
+        <span class="c-variable">df_copy</span>.<span class="c-function">reset_index</span>(<span class="c-keyword">drop</span>=<span class="c-keyword">True</span>, <span class="c-keyword">inplace</span>=<span class="c-keyword">True</span>)
+    <span class="c-keyword">return</span> <span class="c-variable">df_copy</span></code></pre>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong>2. Geodesic Distance Tracking (Haversine Formula):</strong>
+                            Spherical distance (meters) between consecutive spatial coordinates is computed using the Haversine formula (Earth's radius \(R \approx 6,371,000\text{ m}\)):
+                            <div style="margin: 8px 0; text-align: center; color: #fff; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                \[a = \sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\theta}{2}\right)\]
+                                \[d = 2R \cdot \operatorname{arctan2}\left(\sqrt{a}, \sqrt{1-a}\right)\]
+                            </div>
+                            Packets with anomalous jumps (\(d_i > 1000\text{ m}\)) are discarded. The cumulative distance traveled is calculated using a rolling prefix sum (\(\sum d_i\)).
+                            <pre class="code-block" style="font-size: 11px; padding: 10px; margin-top: 10px;"><code><span class="c-keyword">def</span> <span class="c-function">change_to_distance</span>(<span class="c-variable">df</span>):
+    <span class="c-variable">df_copy</span> = <span class="c-variable">df</span>.<span class="c-function">copy</span>()
+    <span class="c-variable">df_copy</span>.<span class="c-function">reset_index</span>(<span class="c-keyword">drop</span>=<span class="c-keyword">True</span>, <span class="c-keyword">inplace</span>=<span class="c-keyword">True</span>)
+    <span class="c-keyword">for</span> <span class="c-variable">i</span> <span class="c-keyword">in</span> <span class="c-function">range</span>(1, <span class="c-function">len</span>(<span class="c-variable">df_copy</span>)):
+        <span class="c-variable">lat1</span>, <span class="c-variable">lon1</span> = <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>-1, <span class="c-string">'latitude'</span>], <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>-1, <span class="c-string">'longitude'</span>]
+        <span class="c-variable">lat2</span>, <span class="c-variable">lon2</span> = <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>, <span class="c-string">'latitude'</span>], <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>, <span class="c-string">'longitude'</span>]
+        <span class="c-variable">distance_km</span> = <span class="c-function">haversine</span>((<span class="c-variable">lat1</span>, <span class="c-variable">lon1</span>), (<span class="c-variable">lat2</span>, <span class="c-variable">lon2</span>), <span class="c-variable">unit</span>=<span class="c-variable">Unit.METERS</span>)
+        <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>, <span class="c-string">'distance_traveled_m'</span>] = <span class="c-variable">distance_km</span>
+    <span class="c-variable">df_copy</span>.<span class="c-function">at</span>[0, <span class="c-string">'distance_traveled_m'</span>] = 0
+    <span class="c-variable">df_copy</span>[<span class="c-string">'sum_distance_traveled_m'</span>] = <span class="c-variable">df_copy</span>[<span class="c-string">'distance_traveled_m'</span>].<span class="c-function">cumsum</span>()
+    <span class="c-keyword">return</span> <span class="c-variable">df_copy</span></code></pre>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong>3. Telemetry Smearing & Packet Drop Compensation:</strong>
+                            Loss of sensor telemetry packets (which register as 0 values in TPMS outputs) are converted to <code>NaN</code> and then filled sequentially. We apply a backward fill (<code>bfill</code>) to resolve initial zero readings, followed by a forward fill (<code>ffill</code>) to propagate the last known telemetry:
+                            <div style="margin: 8px 0; text-align: center; color: #fff; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                \[\mathbf{x}_{\text{smeared}} = \operatorname{ffill}\Big(\operatorname{bfill}\big(\{x_i \mid x_i \neq 0, \text{ else } \text{NaN}\}\big)\Big)\]
+                            </div>
+                            <pre class="code-block" style="font-size: 11px; padding: 10px; margin-top: 10px;"><code><span class="c-keyword">def</span> <span class="c-function">smear_temp_pressure</span>(<span class="c-variable">df</span>):
+    <span class="c-variable">df_copy</span> = <span class="c-variable">df</span>.<span class="c-function">copy</span>()
+    <span class="c-keyword">for</span> <span class="c-variable">col_prefix</span> <span class="c-keyword">in</span> [<span class="c-string">'fl'</span>, <span class="c-string">'fr'</span>, <span class="c-string">'rl'</span>, <span class="c-string">'rr'</span>]:
+        <span class="c-keyword">for</span> <span class="c-variable">suffix</span> <span class="c-keyword">in</span> [<span class="c-string">'temp'</span>, <span class="c-string">'pressure'</span>]:
+            <span class="c-variable">col_name</span> = <span class="c-string">f'</span>{<span class="c-variable">col_prefix</span>}<span class="c-string">_</span>{<span class="c-variable">suffix</span>}<span class="c-string">'</span>
+            <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">df_copy</span>[<span class="c-variable">col_name</span>] == 0, <span class="c-variable">col_name</span>] = <span class="c-variable">np.nan</span>
+            <span class="c-variable">df_copy</span>[<span class="c-variable">col_name</span>] = <span class="c-variable">df_copy</span>[<span class="c-variable">col_name</span>].<span class="c-function">bfill</span>().<span class="c-function">ffill</span>()
+    <span class="c-keyword">return</span> <span class="c-variable">df_copy</span></code></pre>
+                        </li>
+                        <li style="margin-bottom: 20px;">
+                            <strong>4. Vertical Load Stressor (Elevation Delta):</strong>
+                            Vertical elevation adjustments between snapshots are computed to capture grade changes and additional mechanical loading on tires:
+                            <div style="margin: 8px 0; text-align: center; color: #fff; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px;">
+                                \[\Delta E_i = H_i - H_{i-1} \quad (H = \text{altitude in meters})\]
+                            </div>
+                            <pre class="code-block" style="font-size: 11px; padding: 10px; margin-top: 10px;"><code><span class="c-keyword">def</span> <span class="c-function">change_to_elevation</span>(<span class="c-variable">df</span>):
+    <span class="c-variable">df_copy</span> = <span class="c-variable">df</span>.<span class="c-function">copy</span>()
+    <span class="c-variable">df_copy</span>.<span class="c-function">reset_index</span>(<span class="c-keyword">drop</span>=<span class="c-keyword">True</span>, <span class="c-keyword">inplace</span>=<span class="c-keyword">True</span>)
+    <span class="c-keyword">for</span> <span class="c-variable">i</span> <span class="c-keyword">in</span> <span class="c-function">range</span>(1, <span class="c-function">len</span>(<span class="c-variable">df_copy</span>)):
+        <span class="c-variable">alt_1</span> = <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i-1,</span> <span class="c-string">'altitude'</span>]
+        <span class="c-variable">alt_2</span> = <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>, <span class="c-string">'altitude'</span>]
+        <span class="c-variable">df_copy</span>.<span class="c-function">loc</span>[<span class="c-variable">i</span>, <span class="c-string">'elevation_traveled_m'</span>] = <span class="c-variable">alt_2</span> - <span class="c-variable">alt_1</span>
+    <span class="c-variable">df_copy</span>.<span class="c-function">at</span>[0, <span class="c-string">'elevation_traveled_m'</span>] = 0
+    <span class="c-keyword">return</span> <span class="c-variable">df_copy</span></code></pre>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Model Optimization & Deployment</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 12px;">Models are trained to predict the dynamic \(\lambda\) parameter. LightGBM achieved a Mean Absolute Percentage Error (MAPE) of 0.0025 and Mean Absolute Scaled Error (MASE) of 0.2168. Models are then serialized for cloud server deployment.</p>
+                    
+                    <pre class="code-block" style="font-size: 12px; padding: 10px;"><code><span class="c-keyword">from</span> <span class="c-variable">sklearn.model_selection</span> <span class="c-keyword">import</span> <span class="c-variable">GridSearchCV</span>
+<span class="c-keyword">import</span> <span class="c-variable">lightgbm</span> <span class="c-keyword">as</span> <span class="c-variable">lgb</span>
+<span class="c-keyword">import</span> <span class="c-variable">pickle</span>
+
+<span class="c-variable">lightgbm_hyperparam</span> = {
+    <span class="c-string">'num_leaves'</span>: [20, 31, 50, 80],
+    <span class="c-string">'min_child_samples'</span>: [20, 50, 100],
+    <span class="c-string">'max_depth'</span>: [-1, 5, 8],
+    <span class="c-string">'force_col_wise'</span>: [<span class="c-keyword">True</span>]
+}
+<span class="c-variable">lightgbm_grid</span> = <span class="c-function">GridSearchCV</span>(<span class="c-variable">estimator</span>=<span class="c-variable">lgb</span>.<span class="c-function">LGBMRegressor</span>(), <span class="c-keyword">param_grid</span>=<span class="c-variable">lightgbm_hyperparam</span>, <span class="c-variable">cv</span>=3)
+<span class="c-variable">lightgbm_grid</span>.<span class="c-function">fit</span>(<span class="c-variable">X_train</span>, <span class="c-variable">y_train</span>)
+<span class="c-keyword">with</span> <span class="c-function">open</span>(<span class="c-string">'lightgbm_grid.pkl'</span>, <span class="c-string">'wb'</span>) <span class="c-keyword">as</span> <span class="c-variable">f</span>:
+    <span class="c-variable">pickle</span>.<span class="c-function">dump</span>(<span class="c-variable">lightgbm_grid</span>.<span class="c-variable">best_estimator_</span>, <span class="c-variable">f</span>)</code></pre>
+                </div>
+
+                <div class="finding-card">
+                    <h3>System Demonstration Video</h3>
+                    <p style="font-size: 14.5px; color: #aaa; margin-bottom: 15px;">Watch the real-time telemetry streaming from the ESP32-S3 edge gateway to the cloud dashboard and dynamic predictive degradation curve updates in action:</p>
+                    <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid #151515; margin-bottom:10px;">
+                        <iframe style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" src="https://www.youtube.com/embed/4htOM1ONs-Q" title="Edge-Cloud Tire Degradation System Demonstration" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Evaluation Results for Project I -->
+            <div style="margin-top: 40px; border-top: 1px solid #222; padding-top: 25px;">
+                <h3 style="font-size: 18px; color: #fff; margin-bottom: 12px;">Model Evaluation & Performance Metrics</h3>
+                <p style="font-size: 15px; color: #aaa; margin-bottom: 15px;">The models were rigorously evaluated on the tire telemetry dataset using standard regression metrics along with the custom Weibull-specific metrics to measure survival curve alignment:</p>
+                
+                <div style="overflow-x: auto; margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 8px;">
+                        <thead>
+                            <tr style="background: #111; border-bottom: 2px solid #222; color: #fff;">
+                                <th style="padding: 12px; border-right: 1px solid #222;">Model</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MAPE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">SMAPE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MASE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MWE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MQWE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MLWE</th>
+                                <th style="padding: 12px;">MRWE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #ccc;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">LightGBM (Iterative)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.0025 (0.25%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.0018 (0.18%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.2169</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">23,603.94</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">7.57e+08</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">13,909.91</td>
+                                <td style="padding: 10px;">9,694.03</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #aaa;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">XGBoost (Iterative)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.0038 (0.38%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.0031 (0.31%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.3112</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">23,609.09</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">7.57e+08</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">13,901.89</td>
+                                <td style="padding: 10px;">9,707.20</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #999;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">AFT OLS (Iterative)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.1426 (14.26%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.1419 (14.19%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">18.8291</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">24,918.84</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">9.06e+08</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">13,762.53</td>
+                                <td style="padding: 10px;">11,156.32</td>
+                            </tr>
+                            <tr style="color: #888;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">No Covariate (Baseline)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.7508 (75.08%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.5557 (55.57%)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">67.0644</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">31,147.55</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">1.09e+09</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">18,227.45</td>
+                                <td style="padding: 10px;">12,920.10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4 style="font-size: 16px; color: #fff; margin-bottom: 8px;">Conclusions & Key Insights</h4>
+                <p style="font-size: 14.5px; color: #aaa; line-height: 1.5; margin: 0;">
+                    Traditional reliability schedules (represented by the No Covariate baseline) perform poorly under real-world variables, exhibiting a high MAPE of 75.08%. Modeling the scale parameter using Accelerating Failure Time (AFT) OLS improves estimates to a MAPE of 14.26%, but is limited by the linear assumptions of traditional regression. The machine learning regressors (XGBoost and LightGBM) yield a dramatic increase in performance by successfully learning non-linear stress patterns. LightGBM delivers the most accurate survival prediction, achieving a MAPE of 0.25% and a MASE of 0.2169, which confirms that data-driven machine learning models can dynamically adjust Weibull parameters to reflect real-time operational wear.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 5: Applied Project II (C-MAPSS) -->
+        <section class="project-card" id="cmapss-project">
+            <h2 class="project-section-title">Applied Project II: Aircraft Engine Simulation (C-MAPSS)</h2>
+            
+            <p style="font-size: 16px; color: #ccc; margin-bottom: 25px;">This benchmark study evaluates the NASA Turbofan Engine Degradation Simulation Dataset (C-MAPSS) to predict the Remaining Useful Life of high-pressure turbine units. Handling 21 disparate sensor measurements over multi-fault conditions (FD003 dataset) reveals critical data-handling findings:</p>
+            
+            <div class="findings-grid">
+                <div class="finding-card">
+                    <h3>Preprocessing Pipelines</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 12px;">Comparative analysis shows preprocessing design dictates accuracy more than the final regressor choice. A grid of 12 preprocessing combinations (Moving Average, EWMA, Wavelet x Scalers) was instantiated.</p>
+                    
+                    <pre class="code-block" style="font-size: 12px; padding: 10px;"><code><span class="c-keyword">from</span> <span class="c-variable">sklearn.preprocessing</span> <span class="c-keyword">import</span> <span class="c-variable">StandardScaler</span>, <span class="c-variable">MinMaxScaler</span>
+<span class="c-variable">denoising</span> = [<span class="c-string">'ma'</span>, <span class="c-string">'ewma'</span>, <span class="c-string">'wavelet'</span>, <span class="c-string">'none'</span>]
+<span class="c-variable">scalers</span> = [<span class="c-function">StandardScaler</span>(), <span class="c-function">MinMaxScaler</span>()]</code></pre>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Wavelet Denoising Failure</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 12px;">Wavelet thresholding severely degraded model performance. Denoising stripped critical high-frequency transient signals representing early blade cracking.</p>
+                    
+                    <pre class="code-block" style="font-size: 12px; padding: 10px;"><code><span class="c-keyword">import</span> <span class="c-variable">pywt</span>
+<span class="c-keyword">def</span> <span class="c-function">wavelet_denoise</span>(<span class="c-variable">signal</span>):
+    <span class="c-variable">coeffs</span> = <span class="c-variable">pywt</span>.<span class="c-function">wavedec</span>(<span class="c-variable">signal</span>, <span class="c-string">'db4'</span>, <span class="c-variable">level</span>=1)
+    <span class="c-variable">uthresh</span> = <span class="c-variable">np</span>.<span class="c-function">std</span>(<span class="c-variable">coeffs</span>[-1]) * <span class="c-variable">np</span>.<span class="c-function">sqrt</span>(2 * <span class="c-variable">np</span>.<span class="c-function">log</span>(<span class="c-function">len</span>(<span class="c-variable">signal</span>)))
+    <span class="c-variable">coeffs</span>[1:] = [<span class="c-variable">pywt</span>.<span class="c-function">threshold</span>(<span class="c-variable">c</span>, <span class="c-variable">value</span>=<span class="c-variable">uthresh</span>) <span class="c-keyword">for</span> <span class="c-variable">c</span> <span class="c-keyword">in</span> <span class="c-variable">coeffs</span>[1:]]
+    <span class="c-keyword">return</span> <span class="c-variable">pywt</span>.<span class="c-function">waverec</span>(<span class="c-variable">coeffs</span>, <span class="c-string">'db4'</span>)</code></pre>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>Simple Moving Average</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 12px;">Simple Moving Average (SMA) or No Denoising yielded the optimal baselines. These preserved the wear-out trends without flattening the operational stressors.</p>
+                    
+                    <pre class="code-block" style="font-size: 12px; padding: 10px;"><code><span class="c-keyword">def</span> <span class="c-function">apply_sma</span>(<span class="c-variable">df</span>, <span class="c-variable">sensor_cols</span>, <span class="c-variable">window</span>=5):
+    <span class="c-keyword">for</span> <span class="c-variable">unit_id</span> <span class="c-keyword">in</span> <span class="c-variable">df</span>[<span class="c-string">'unit_number'</span>].<span class="c-function">unique</span>():
+        <span class="c-keyword">for</span> <span class="c-variable">col</span> <span class="c-variable">in</span> <span class="c-variable">sensor_cols</span>:
+            <span class="c-variable">mask</span> = <span class="c-variable">df</span>[<span class="c-string">'unit_number'</span>] == <span class="c-variable">unit_id</span>
+            <span class="c-variable">df</span>.<span class="c-function">loc</span>(<span class="c-variable">mask</span>, <span class="c-variable">col</span>) = <span class="c-variable">df</span>[<span class="c-variable">mask</span>][<span class="c-variable">col</span>].<span class="c-function">rolling</span>(<span class="c-variable">window</span>).<span class="c-function">mean</span>()
+    <span class="c-keyword">return</span> <span class="c-variable">df</span></code></pre>
+                </div>
+                
+                <div class="finding-card">
+                    <h3>XGBoost Robustness</h3>
+                    <p style="font-size: 14px; color: #aaa; margin-bottom: 12px;">XGBoost proved to be the most robust architecture against the complex multi-fault dataset, resisting overfitting on transient sensor failures.</p>
+                    
+                    <pre class="code-block" style="font-size: 12px; padding: 10px;"><code><span class="c-keyword">import</span> <span class="c-variable">xgboost</span> <span class="c-keyword">as</span> <span class="c-variable">xgb</span>
+<span class="c-variable">xgb_regressor</span> = <span class="c-variable">xgb</span>.<span class="c-function">XGBRegressor</span>(
+    <span class="c-variable">n_estimators</span>=500,
+    <span class="c-variable">max_depth</span>=5,
+    <span class="c-variable">learning_rate</span>=0.05
+)
+<span class="c-variable">xgb_regressor</span>.<span class="c-function">fit</span>(<span class="c-variable">X_train_fd003</span>, <span class="c-variable">y_train_fd003</span>)</code></pre>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3>The Mathematical Hazard Bridge</h3>
+                <p style="font-size: 15px; color: #aaa; margin-bottom: 12px;">The hazard function establishes the dynamic wear-out baseline by calculating failure rate at time x given shape (k) and scale (lambda) parameters:</p>
+                <pre class="code-block"><code><span class="c-comment"># Dynamic wear-out hazard function that bridges statistical theory and ML predictions</span>
+<span class="c-keyword">def</span> <span class="c-function">hazard</span>(<span class="c-variable">x</span>, <span class="c-variable">k</span>=4.359886822599401, <span class="c-variable">lamb</span>=236.76593258114204):
+    <span class="c-keyword">return</span> (<span class="c-variable">k</span> / <span class="c-variable">lamb</span>) * ((<span class="c-variable">x</span> / <span class="c-variable">lamb</span>) ** (<span class="c-variable">k</span> - 1))</code></pre>
+            </div>
+
+            <!-- Model Evaluation Results for Project II -->
+            <div style="margin-top: 40px; border-top: 1px solid #222; padding-top: 25px;">
+                <h3 style="font-size: 18px; color: #fff; margin-bottom: 12px;">Model Evaluation & Performance Metrics</h3>
+                <p style="font-size: 15px; color: #aaa; margin-bottom: 15px;">The performance of various models evaluated on the turbofan engine dataset (FD001) under multiple preprocessing configurations highlights the strength of the hybrid framework:</p>
+                
+                <div style="overflow-x: auto; margin-bottom: 20px;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; background: rgba(0,0,0,0.4); border: 1px solid #222; border-radius: 8px;">
+                        <thead>
+                            <tr style="background: #111; border-bottom: 2px solid #222; color: #fff;">
+                                <th style="padding: 12px; border-right: 1px solid #222;">Model</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MAE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">RMSE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">R² Score</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MWE (Weibull Error)</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MQWE</th>
+                                <th style="padding: 12px; border-right: 1px solid #222;">MLWE</th>
+                                <th style="padding: 12px;">MRWE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #ccc;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">LightGBM (Linear Time)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">25.44</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">34.21</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.3222</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">27.16</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">1,058.44</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">9.07</td>
+                                <td style="padding: 10px;">18.09</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #ccc;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">XGBoost (Linear Time)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">26.59</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">35.08</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.2875</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">27.86</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">1,100.96</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">9.03</td>
+                                <td style="padding: 10px;">18.83</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #aaa;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">Random Forest (Linear Time)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">26.62</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">34.83</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.2976</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">28.20</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">1,107.17</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">9.78</td>
+                                <td style="padding: 10px;">18.43</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #aaa;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">SVM (Linear Time)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">29.74</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">36.85</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.2136</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">30.56</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">1,256.38</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">11.90</td>
+                                <td style="padding: 10px;">18.67</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #999;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">Linear Regression</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">35.43</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">41.31</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.0118</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">34.37</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">1,448.33</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">9.56</td>
+                                <td style="padding: 10px;">24.82</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #1c1c1c; color: #888;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">AFT OLS (Baseline)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">36.17</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">48.64</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.9726</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">44.09</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">2,427.67</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">10.68</td>
+                                <td style="padding: 10px;">33.40</td>
+                            </tr>
+                            <tr style="color: #888;">
+                                <td style="padding: 10px; border-right: 1px solid #222; font-weight: bold; color: #fff;">No Covariate (Baseline)</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">38.50</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">50.53</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">0.9704</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">43.18</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">2,279.94</td>
+                                <td style="padding: 10px; border-right: 1px solid #222;">10.83</td>
+                                <td style="padding: 10px;">32.35</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h4 style="font-size: 16px; color: #fff; margin-bottom: 8px;">Conclusions & Key Insights</h4>
+                <p style="font-size: 14.5px; color: #aaa; line-height: 1.5; margin: 0;">
+                    As detailed in the ETASR and ICICyTA papers, the study proves that a covariate-driven Weibull scale parameter regression outperforms static modeling. Simple linear regression and traditional survival modeling fail to capture the degradation kinetics under multi-fault flying environments. LightGBM, when combined with optimized preprocessing (Min-Max Scaling and Simple Moving Average), yielded the lowest MAE of 25.44 cycles and the lowest Mean Weibull Error of 27.16, representing a substantial performance leap. The results indicate that data-driven machine learning models successfully estimate aircraft engine Remaining Useful Life (RUL) while statistical hazard bridges translate predictions into reliable survival probability distributions.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 6: Publications & Data -->
+        <section class="project-card" id="publications">
+            <h2 class="project-section-title">Publications, Datasets & Reproducibility</h2>
+            
+            <div class="publications-list">
+                <div class="pub-item">
+                    <div class="pub-info">
+                        <div class="pub-icon-doc" style="font-size: 11px; font-weight: bold; color: #888;">PDF</div>
+                        <div>
+                            <div class="pub-title">Machine Learning for Covariate-Driven Changes in Weibull Scale Parameter</div>
+                            <div class="pub-meta">Engineering, Technology & Applied Science Research (ETASR), 2026. DOI: <a href="https://doi.org/10.48084/etasr.15186" target="_blank" style="color: #3366cc; text-decoration: none; font-weight: 600;">10.48084/etasr.15186</a></div>
+                        </div>
+                    </div>
+                    <a href="assets/ETASR_15186.pdf" download class="pub-download">Download PDF</a>
+                </div>
+                
+                <div class="pub-item">
+                    <div class="pub-info">
+                        <div class="pub-icon-doc" style="font-size: 11px; font-weight: bold; color: #888;">PDF</div>
+                        <div>
+                            <div class="pub-title">Hybrid ML-Weibull Predictive Maintenance System for Dynamic Tire Remaining Useful Life Estimation</div>
+                            <div class="pub-meta">International Journal of Information Technology (IJIT), 2026.</div>
+                        </div>
+                    </div>
+                    <a href="assets/draft_ml_weibull_tire_rev1_IJIT.pdf" download class="pub-download">Download PDF</a>
+                </div>
+                
+                <div class="pub-item">
+                    <div class="pub-info">
+                        <div class="pub-icon-doc" style="font-size: 11px; font-weight: bold; color: #888;">PDF</div>
+                        <div>
+                            <div class="pub-title">A Comparative Analysis of Machine Learning Models for Aircraft Engine Remaining Useful Life Prediction</div>
+                            <div class="pub-meta">International Conference on Intelligent Computing and Cybersecurity (ICICyTA), 2025. DOI: <a href="https://doi.org/10.1109/ICICyTA68677.2025.11362466" target="_blank" style="color: #3366cc; text-decoration: none; font-weight: 600;">10.1109/ICICyTA68677.2025.11362466</a></div>
+                        </div>
+                    </div>
+                    <a href="assets/a39-fitran_ramadhan stamped-e.pdf" download class="pub-download">Download PDF</a>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 20px; color: #fff; margin-bottom: 15px; border-bottom: 1px solid #222; padding-bottom: 8px;">Dataset Previews & Explorer</h3>
+                <p style="font-size: 15px; color: #aaa; margin-bottom: 25px;">Download and explore the structured telemetry and simulation datasets used in these predictive maintenance studies:</p>
+                
+                <div class="findings-grid">
+                    <!-- Dataset Card 1: Tires -->
+                    <div class="finding-card" style="justify-content: flex-start; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #222; padding-bottom: 10px; margin-bottom: 5px;">
+                            <h4 style="font-size: 17px; color: #ffaa00; margin: 0; display: flex; align-items: center; gap: 6px;">IoT Vehicle Tire Logs</h4>
+                            <a href="assets/vehicle_tire_logs.zip" download class="pub-download">Download ZIP (266 KB)</a>
+                        </div>
+                        <p style="font-size: 14px; color: #ccc; margin: 0; line-height: 1.5;">This dataset maps real-time telemetry captured via a custom ESP32-S3 microcontroller gateway on a moving passenger vehicle. It records environmental stressors alongside tire wear profiles.</p>
+                        
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid #1c1c1c; border-radius: 8px; padding: 12px; font-size: 13px;">
+                            <strong style="color: #fff; display: block; margin-bottom: 5px;">File Structure:</strong>
+                            <ul style="margin: 0; padding-left: 18px; color: #aaa; display: flex; flex-direction: column; gap: 4px; list-style-type: disc;">
+                                <li><strong>vehicle_logs:</strong> Raw, unfiltered asynchronous sensor telemetry from TPMS, OBD-II, and GPS.</li>
+                                <li><strong>vehicle_logs_tread_14_1:</strong> Preprocessed, cleaned, and synchronized time-series data from the first run. The suffix <code>14_1</code> denotes the first part of the dataset gathered on the 14th day of telemetry capture.</li>
+                                <li><strong>vehicle_map_14_1:</strong> High-resolution route map of the test vehicle's trip for gathering telemetry.</li>
+                            </ul>
+                        </div>
+                        
+                        
+                        
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid #1c1c1c; border-radius: 8px; padding: 12px; font-size: 13px; margin-top: 10px;">
+                        <strong style="color: #fff; display: block; margin-bottom: 8px;">vehicle_logs (Raw Data - First 5 Rows Preview):</strong>
+                        <div style="overflow-x: auto; border: 1px solid #222; border-radius: 6px; background: rgba(5,5,5,0.8);">
+                        <table style="width: 100%; min-width: 1500px; border-collapse: collapse; font-family: monospace; font-size: 11px; text-align: left; color: #ccc;">
+                        <thead>
+                        <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid #222;">
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">id</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">timestamp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">vehicle_id</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">latitude</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">longitude</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">altitude</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">speed</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rpm</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">engine_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">throttle_pos</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">engine_load</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fuel_level</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fl_press</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fl_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fl_bat</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fr_press</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fr_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fr_bat</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rl_press</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rl_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rl_bat</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rr_press</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rr_temp</th>
+                        <th style="padding: 6px 8px; color: #fff;">rr_bat</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="border-bottom: 1px solid #1c1c1c;">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">44</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-07 04:15:27+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;">4d106730...</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.972864</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6471638</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">698.3</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">699</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">84</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">15.68627</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.80392</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px;">&nbsp;</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1c1c1c; background: rgba(255,255,255,0.01);">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">45</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-07 04:15:36+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;">4d106730...</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.972861</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6471588</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">698.9</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">698</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">84</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">15.29412</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.80392</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px;">&nbsp;</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1c1c1c;">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">46</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-07 04:15:41+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;">4d106730...</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.972859</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6471562</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">699.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">711</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">85</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">15.29412</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.01961</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px;">&nbsp;</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1c1c1c; background: rgba(255,255,255,0.01);">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">47</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-07 04:15:46+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;">4d106730...</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.972858</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6471558</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">699.4</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">709</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">85</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">15.68627</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.01961</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">48</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-07 04:15:51+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap; max-width: 80px; overflow: hidden; text-overflow: ellipsis;">4d106730...</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.972857833</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6471568</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">699.6</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">711</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">85</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">15.68627</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">28.62745</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">&nbsp;</td>
+                        <td style="padding: 6px 8px;">&nbsp;</td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        </div>
+                        </div>
+                        
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid #1c1c1c; border-radius: 8px; padding: 12px; font-size: 13px; margin-top: 15px;">
+                        <strong style="color: #fff; display: block; margin-bottom: 8px;">vehicle_logs_tread_14_1 (Preprocessed Data - First 5 Rows Preview):</strong>
+                        <div style="overflow-x: auto; border: 1px solid #222; border-radius: 6px; background: rgba(5,5,5,0.8);">
+                        <table style="width: 100%; min-width: 1500px; border-collapse: collapse; font-family: monospace; font-size: 11px; text-align: left; color: #ccc;">
+                        <thead>
+                        <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid #222;">
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">timestamp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">latitude</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">longitude</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">altitude</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">speed</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">engine_load</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fl_pressure</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fl_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fr_pressure</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">fr_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rl_pressure</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rl_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rr_pressure</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">rr_temp</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">dist_m</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sum_dist_m</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">elev_m</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">tr_fl</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">tr_fr</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">tr_rl</th>
+                        <th style="padding: 6px 8px; color: #fff;">tr_rr</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style="border-bottom: 1px solid #1c1c1c;">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-14 05:33:57+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.908889667</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6577782</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">717.2</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">3</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">60.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">27.41117</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">28.86149</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.58666</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">24.22045</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">34.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.5482</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.5482</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.1000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">5.97e-07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">1.53e-06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">2.15e-06</td>
+                        <td style="padding: 6px 8px; font-size: 10px;">1.44e-06</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1c1c1c; background: rgba(255,255,255,0.01);">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-14 05:34:02+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.908884667</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6578010</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">717.5</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">81.56863</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">27.41117</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">28.86149</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.58666</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">24.22045</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">34.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2.5775</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">4.1257</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.3000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">5.97e-07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">1.53e-06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">2.15e-06</td>
+                        <td style="padding: 6px 8px; font-size: 10px;">1.44e-06</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1c1c1c;">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-14 05:34:07+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.908887000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6578203</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">718.2</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">62.35294</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">27.41117</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">28.86149</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.58666</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">24.22045</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">34.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2.1462</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">6.2719</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.7000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">5.97e-07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">1.53e-06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">2.15e-06</td>
+                        <td style="padding: 6px 8px; font-size: 10px;">1.44e-06</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #1c1c1c; background: rgba(255,255,255,0.01);">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-14 05:34:12+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.908886833</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6578295</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">719.1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">59.60784</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">27.41117</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">28.86149</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.58666</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">24.22045</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">34.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.0157</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">7.2877</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.9000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">5.97e-07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">1.53e-06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">2.15e-06</td>
+                        <td style="padding: 6px 8px; font-size: 10px;">1.44e-06</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; white-space: nowrap;">2025-11-14 05:34:17+00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-6.908890833</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">107.6578455</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">719.5</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">84.70588</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">27.41117</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">28.86149</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">29.58666</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">35.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">24.22045</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">34.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.8213</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">9.1090</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.4000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">5.97e-07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">1.53e-06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c; font-size: 10px;">2.15e-06</td>
+                        <td style="padding: 6px 8px; font-size: 10px;">1.44e-06</td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 15px;">
+                            <strong style="color: #fff; display: block; margin-bottom: 8px; font-size: 13px; text-align: left;">Telemetry Route Map (14_1 Run):</strong>
+                            <img src="assets/vehicle_map_14_1.jpg" alt="Telemetry Route Map" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #222; border-radius: 8px; background: #000; margin: 15px auto; display: block;">
+                        </div>
+                    </div>
+                    
+                    <!-- Dataset Card 2: CMAPSS -->
+                    <div class="finding-card" style="justify-content: flex-start; gap: 15px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #222; padding-bottom: 10px; margin-bottom: 5px;">
+                            <h4 style="font-size: 17px; color: #ff3366; margin: 0; display: flex; align-items: center; gap: 6px;">NASA C-MAPSS Dataset</h4>
+                            <a href="assets/CMAPSSData.zip" download class="pub-download">Download ZIP (12.4 MB)</a>
+                        </div>
+                        <p style="font-size: 14px; color: #ccc; margin: 0; line-height: 1.5;">This benchmark dataset contains simulated run-to-failure trajectories of aircraft turbofan engines generated using NASA's Commercial Modular Aero-Propulsion System Simulation (C-MAPSS) tool. It is widely used to evaluate Remaining Useful Life (RUL) predictions.</p>
+                        
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid #1c1c1c; border-radius: 8px; padding: 12px; font-size: 13px;">
+                            <strong style="color: #fff; display: block; margin-bottom: 5px;">File Structure (Converted to CSV):</strong>
+                            <ul style="margin: 0; padding-left: 18px; color: #aaa; display: flex; flex-direction: column; gap: 4px; list-style-type: disc;">
+                                <li><strong>train_FD001.csv:</strong> Run-to-failure sensor histories for 100 engines (operating under sea-level conditions with high-pressure compressor degradation).</li>
+                                <li><strong>test_FD001.csv:</strong> Operational histories for 100 test engines where recording is truncated prior to failure.</li>
+                                <li><strong>RUL_FD001.csv:</strong> Ground-truth Remaining Useful Life (remaining cycles) for the 100 test engines.</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid #1c1c1c; border-radius: 8px; padding: 12px; font-size: 13px;">
+                            <strong style="color: #fff; display: block; margin-bottom: 5px;">NASA Damage Propagation Context:</strong>
+                            <p style="margin: 0; color: #aaa; line-height: 1.4;">
+                                As detailed in the accompanying <em>"Damage Propagation Modeling.pdf"</em> and <em>"readme.txt"</em>, each turbofan simulation begins with normal operations and develops varying degrees of initial wear and manufacturing deviations (unknown to the model). Over operational cycles, component faults propagate (such as High-Pressure Compressor blade erosion and Fan blade wear) until critical failure. The data is contaminated with sensor noise and consists of 26 columns: Engine ID, cycles, 3 operational settings, and 21 distinct thermo-mechanical sensors.
+                            </p>
+                        </div>
+
+                        <div style="background: rgba(0,0,0,0.3); border: 1px solid #1c1c1c; border-radius: 8px; padding: 12px; font-size: 13px; margin-top: 10px;">
+                        <strong style="color: #fff; display: block; margin-bottom: 8px;">train_FD001.csv (Simulated Run-to-Failure - First 5 Rows Preview):</strong>
+                        <div style="overflow-x: auto; border: 1px solid #222; border-radius: 6px; background: rgba(5,5,5,0.8);">
+                        <table style="width: 100%; min-width: 1800px; border-collapse: collapse; font-family: monospace; font-size: 11px; text-align: left; color: #ccc;">
+                        <thead>
+                        <tr style="background: rgba(255,255,255,0.05); border-bottom: 1px solid #222;">
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">unit_number</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">time_in_cycles</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">op_setting_1</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">op_setting_2</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">op_setting_3</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_1</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_2</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_3</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_4</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_5</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_6</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_7</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_8</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_9</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_10</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_11</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_12</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_13</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_14</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_15</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_16</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_17</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_18</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_19</th>
+                        <th style="padding: 6px 8px; border-right: 1px solid #222; color: #fff;">sensor_20</th>
+                        <th style="padding: 6px 8px; color: #fff;">sensor_21</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr style=" border-bottom: 1px solid #1c1c1c;">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-0.0007</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-0.0004</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">518.67</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">641.82</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1589.70</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1400.60</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">14.62</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">21.61</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">554.36</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">9046.19</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.30</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">47.47</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">521.66</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.02</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8138.62</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8.4195</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.03</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">392</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">39.06</td>
+                        <td style="padding: 6px 8px;">23.4190</td>
+                        </tr>
+                        <tr style=" border-bottom: 1px solid #1c1c1c; background: rgba(255,255,255,0.01);">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.0019</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-0.0003</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">518.67</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">642.15</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1591.82</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1403.14</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">14.62</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">21.61</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">553.75</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.04</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">9044.07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.30</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">47.49</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">522.28</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.07</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8131.49</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8.4318</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.03</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">392</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">39.00</td>
+                        <td style="padding: 6px 8px;">23.4236</td>
+                        </tr>
+                        <tr style=" border-bottom: 1px solid #1c1c1c;">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">3</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-0.0043</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.0003</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">518.67</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">642.35</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1587.99</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1404.20</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">14.62</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">21.61</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">554.26</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.08</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">9052.94</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.30</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">47.27</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">522.42</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.03</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8133.23</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8.4178</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.03</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">390</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">38.95</td>
+                        <td style="padding: 6px 8px;">23.3442</td>
+                        </tr>
+                        <tr style=" border-bottom: 1px solid #1c1c1c; background: rgba(255,255,255,0.01);">
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">4</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.0007</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.0000</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">518.67</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">642.35</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1582.79</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1401.87</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">14.62</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">21.61</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">554.45</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.11</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">9049.48</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.30</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">47.13</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">522.86</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.08</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8133.83</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8.3682</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.03</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">392</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">38.88</td>
+                        <td style="padding: 6px 8px;">23.3739</td>
+                        </tr>
+                        <tr>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">5</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-0.0019</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">-0.0002</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.0</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">518.67</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">642.37</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1582.85</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1406.22</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">14.62</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">21.61</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">554.00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.06</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">9055.15</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">1.30</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">47.28</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">522.19</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388.04</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8133.80</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">8.4294</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">0.03</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">393</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">2388</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">100.00</td>
+                        <td style="padding: 6px 8px; border-right: 1px solid #1c1c1c;">38.90</td>
+                        <td style="padding: 6px 8px;">23.4044</td>
+                        </tr>
+                        </tbody>
+                        </table>
+                        </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 15px;">
+                            <strong style="color: #fff; display: block; margin-bottom: 8px; font-size: 13px; text-align: left;">Simulated Engine Degradation Visualization:</strong>
+                            <img src="assets/engine-simulated-cmapss.jpg" alt="Simulated C-MAPSS Engine Degradation" style="max-width: 400px; width: 100%; height: auto; border: 1px solid #222; border-radius: 8px; background: #000; margin: 15px auto; display: block;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(255,170,0,0.05); border: 1px dashed rgba(255,170,0,0.3); border-radius: 8px; padding: 20px; margin-top: 40px;">
+                <h4 style="color:#ffaa00; font-size: 16px; font-weight: bold; margin-bottom: 8px;">Reproducibility Note</h4>
+                <p style="font-size: 14.5px; color: #ccc; margin: 0; line-height: 1.5;">All code notebooks were developed on Google Colab linked to Google Drive storage. To run them locally, ensure you install dependencies using `pip install -r requirements.txt` (including `lifelines`, `xgboost`, and `lightgbm`), adjust G-Drive mounting lines, and re-map CSV paths relative to your local root directory.</p>
+            </div>
+        </section>
+
+        <!-- GitHub Repository Card -->
+        <section class="project-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 40px 20px; margin-top: 30px; border-style: dashed; border-color: rgba(51, 102, 204, 0.3); background: rgba(51, 102, 204, 0.02);">
+            <h3 style="font-size: 20px; color: #fff; margin: 0; font-weight: 600;">Explore the Codebase</h3>
+            <p style="font-size: 14.5px; color: #aaa; max-width: 520px; margin: 0 auto; line-height: 1.6;">
+                Access the complete machine learning models, lifelines survival analysis regressions, ESP32-S3 microcontroller firmware, and turbofan/tire telemetry preparation pipelines on GitHub.
+            </p>
+            <div style="margin-top: 10px;">
+                <a href="https://github.com/MFitran/predictive-maintenance-weibull-machine-learning" target="_blank" class="post-btn" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 16px 36px; font-size: 17px; border-radius: 12px; font-weight: 700; border-color: #3366cc; color: #fff; background: transparent; transition: all 0.2s ease-in-out;" onmouseover="this.style.borderColor='#5588ff'; this.style.backgroundColor='rgba(51, 102, 204, 0.12)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='#3366cc'; this.style.backgroundColor='transparent'; this.style.transform='none';">
+                    <img src="assets/github_logo.png" alt="GitHub" style="width: 20px; height: 20px; background: transparent; filter: invert(1);">
+                    Go to GitHub Repository
+                </a>
+            </div>
+        </section>
+    </main>
+    </div><!-- /#page-wrap -->
+
+    <!-- MathJax for rendering LaTeX equation structures -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Script triggers for the interactive math widget -->
+    <script>
+        function drawWeibull() {
+            const k = parseFloat(document.getElementById('shape-k').value);
+            const lmbda = parseFloat(document.getElementById('scale-lambda').value);
+            
+            document.getElementById('k-val').innerText = k.toFixed(1);
+            document.getElementById('lambda-val').innerText = lmbda.toFixed(0);
+            
+            const width = 450;
+            const height = 220;
+            const paddingLeft = 40;
+            const paddingRight = 20;
+            const paddingTop = 20;
+            const paddingBottom = 30;
+            
+            const chartWidth = width - paddingLeft - paddingRight;
+            const chartHeight = height - paddingTop - paddingBottom;
+            const tMax = 600;
+            
+            // Peak PDF computation to keep graphing space responsive
+            let pdfMax = 0.002;
+            if (k > 1) {
+                const peakT = lmbda * Math.pow((k - 1) / k, 1 / k);
+                pdfMax = (k / lmbda) * Math.pow(peakT / lmbda, k - 1) * Math.exp(-Math.pow(peakT / lmbda, k));
+            } else {
+                pdfMax = k / lmbda; 
+            }
+            if (pdfMax <= 0 || isNaN(pdfMax)) pdfMax = 0.002;
+            
+            let pdfPath = "";
+            let cdfPath = "";
+            
+            for (let xScreen = 0; xScreen <= chartWidth; xScreen++) {
+                const t = (xScreen / chartWidth) * tMax;
+                
+                // PDF computation
+                let pdf = 0;
+                if (t > 0 || k >= 1) {
+                    pdf = (k / lmbda) * Math.pow(t / lmbda, k - 1) * Math.exp(-Math.pow(t / lmbda, k));
+                }
+                if (isNaN(pdf) || !isFinite(pdf)) pdf = 0;
+                
+                // CDF computation
+                const cdf = 1 - Math.exp(-Math.pow(t / lmbda, k));
+                
+                const xSvg = paddingLeft + xScreen;
+                const yPdfSvg = paddingTop + chartHeight - (pdf / pdfMax) * chartHeight;
+                const yCdfSvg = paddingTop + chartHeight - cdf * chartHeight;
+                
+                if (xScreen === 0) {
+                    pdfPath = `M ${xSvg} ${yPdfSvg}`;
+                    cdfPath = `M ${xSvg} ${yCdfSvg}`;
+                } else {
+                    pdfPath += ` L ${xSvg} ${yPdfSvg}`;
+                    cdfPath += ` L ${xSvg} ${yCdfSvg}`;
+                }
+            }
+            
+            document.getElementById('pdf-curve').setAttribute('d', pdfPath);
+            document.getElementById('cdf-curve').setAttribute('d', cdfPath);
+            
+            // Scale and line updates
+            const lambdaX = paddingLeft + (lmbda / tMax) * chartWidth;
+            document.getElementById('lambda-line').setAttribute('x1', lambdaX);
+            document.getElementById('lambda-line').setAttribute('x2', lambdaX);
+            document.getElementById('lambda-label').setAttribute('x', lambdaX + 5);
+            
+            const cdf63Y = paddingTop + chartHeight - 0.632 * chartHeight;
+            document.getElementById('cdf-63-line').setAttribute('y1', cdf63Y);
+            document.getElementById('cdf-63-line').setAttribute('y2', cdf63Y);
+            document.getElementById('cdf-63-line').setAttribute('x2', lambdaX);
+            
+            const cdf63Text = document.getElementById('cdf-63-text');
+            cdf63Text.setAttribute('y', cdf63Y - 5);
+            cdf63Text.setAttribute('x', Math.max(45, lambdaX - 105));
+                }
+
+        function drawWeibullError() {
+            const tActual = parseFloat(document.getElementById('actual-t').value);
+            const k = parseFloat(document.getElementById('pred-k').value);
+            const lmbda = parseFloat(document.getElementById('pred-lambda').value);
+            
+            document.getElementById('act-t-val').innerText = tActual.toFixed(0);
+            document.getElementById('pred-k-val').innerText = k.toFixed(1);
+            document.getElementById('pred-lambda-val').innerText = lmbda.toFixed(0);
+            
+            const width = 450;
+            const height = 220;
+            const paddingLeft = 40;
+            const paddingRight = 20;
+            const paddingTop = 20;
+            const paddingBottom = 30;
+            
+            const chartWidth = width - paddingLeft - paddingRight;
+            const chartHeight = height - paddingTop - paddingBottom;
+            const tMax = 600;
+            
+            let cdfPath = "";
+            let stepPath = "";
+            let lweAreaPath = `M ${paddingLeft} ${paddingTop + chartHeight}`;
+            
+            const xActualScreen = paddingLeft + (tActual / tMax) * chartWidth;
+            let rweAreaPath = `M ${xActualScreen} ${paddingTop}`;
+            rweAreaPath += ` L ${paddingLeft + chartWidth} ${paddingTop}`;
+            
+            let rwePoints = [];
+            
+            // Trapezoidal integration: LWE, RWE, QWE all bounded to chart tMax
+            const steps = 300;
+            const dt = tMax / steps;
+            let lweSum = 0;
+            let rweSum = 0;
+            let qweSum = 0;
+            
+            for (let i = 0; i < steps; i++) {
+                const tVal = (i + 0.5) * dt;
+                const cdf = 1 - Math.exp(-Math.pow(tVal / lmbda, k));
+                if (tVal < tActual) {
+                    lweSum += cdf * dt;
+                    qweSum += (cdf * cdf) * dt;
+                } else {
+                    rweSum += (1 - cdf) * dt;
+                    qweSum += ((1 - cdf) * (1 - cdf)) * dt;
+                }
+            }
+            
+            // WE = LWE + RWE by definition:
+            // WE(t_act, λ, k) = ∫₀^{t_act} F(x)dx  +  ∫_{t_act}^{∞} (1−F(x))dx
+            const weSum = lweSum + rweSum;
+            
+            document.getElementById('lwe-readout').innerText = lweSum.toFixed(2);
+            document.getElementById('rwe-readout').innerText = rweSum.toFixed(2);
+            document.getElementById('we-readout').innerText = weSum.toFixed(2);
+            document.getElementById('qwe-readout').innerText = qweSum.toFixed(2);
+            
+            // Draw lines and paths
+            for (let xScreen = 0; xScreen <= chartWidth; xScreen++) {
+                const t = (xScreen / chartWidth) * tMax;
+                const cdf = 1 - Math.exp(-Math.pow(t / lmbda, k));
+                
+                const xSvg = paddingLeft + xScreen;
+                const yCdfSvg = paddingTop + chartHeight - cdf * chartHeight;
+                
+                if (xScreen === 0) {
+                    cdfPath = `M ${xSvg} ${yCdfSvg}`;
+                } else {
+                    cdfPath += ` L ${xSvg} ${yCdfSvg}`;
+                }
+                
+                if (t <= tActual) {
+                    lweAreaPath += ` L ${xSvg} ${yCdfSvg}`;
+                } else {
+                    rwePoints.push(`${xSvg} ${yCdfSvg}`);
+                }
+            }
+            
+            // Close LWE shaded path
+            lweAreaPath += ` L ${xActualScreen} ${paddingTop + chartHeight} Z`;
+            
+            // Close RWE shaded path
+            if (rwePoints.length > 0) {
+                const lastPoint = rwePoints[rwePoints.length - 1];
+                rweAreaPath += ` L ${lastPoint}`;
+                for (let i = rwePoints.length - 2; i >= 0; i--) {
+                    rweAreaPath += ` L ${rwePoints[i]}`;
+                }
+                const cdfActual = 1 - Math.exp(-Math.pow(tActual / lmbda, k));
+                const yCdfActualSvg = paddingTop + chartHeight - cdfActual * chartHeight;
+                rweAreaPath += ` L ${xActualScreen} ${yCdfActualSvg} Z`;
+            } else {
+                rweAreaPath = "";
+            }
+            
+            document.getElementById('pred-cdf-curve').setAttribute('d', cdfPath);
+            document.getElementById('lwe-area').setAttribute('d', lweAreaPath);
+            document.getElementById('rwe-area').setAttribute('d', rweAreaPath);
+            
+            // Draw step function
+            stepPath = `M ${paddingLeft} ${paddingTop + chartHeight} L ${xActualScreen} ${paddingTop + chartHeight} L ${xActualScreen} ${paddingTop} L ${paddingLeft + chartWidth} ${paddingTop}`;
+            document.getElementById('actual-step-curve').setAttribute('d', stepPath);
+            
+            // Update vertical dashed line
+            document.getElementById('actual-t-line').setAttribute('x1', xActualScreen);
+            document.getElementById('actual-t-line').setAttribute('x2', xActualScreen);
+        }
+
+        // Initialize curves on load
+        window.addEventListener('DOMContentLoaded', () => {
+            drawWeibull();
+            drawWeibullError();
+        });
+    </script>
+
+
+    <footer class="contact-footer">
+        <div class="footer-sections">
+            <div class="footer-section">
+                <h3 class="footer-title">My Contacts</h3>
+                <div class="footer-links">
+                    <a href="https://wa.me/6281398575252" target="_blank" title="WhatsApp"><img src="assets/whatsapp_logo.png" alt="WhatsApp"></a>
+                    <a href="mailto:fitranhp@gmail.com" title="Email"><img src="assets/gmail_logo.png" alt="Email" class="logo-gmail"></a>
+                    <a href="https://www.linkedin.com/in/muhammad-fitran-ramadhan/?locale=en_US" target="_blank" title="LinkedIn"><img src="assets/linkedin_logo.png" alt="LinkedIn"></a>
+                    <a href="https://www.instagram.com/m._fitran/" target="_blank" title="Instagram"><img src="assets/instagram_logo.jpeg" alt="Instagram"></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Professional Profiles</h3>
+                <div class="footer-links">
+                    <a href="https://github.com/MFitran" target="_blank" title="GitHub"><img src="assets/github_logo.png" alt="GitHub" class="logo-github"></a>
+                    <a href="https://leetcode.com/u/Fitran/" target="_blank" title="LeetCode"><img src="assets/leetcode_logo.png" alt="LeetCode"></a>
+                    <a href="https://scholar.google.com/citations?user=GgtQvKgAAAAJ&hl=en" target="_blank" title="Google Scholar"><img src="assets/google_scholar_logo.png" alt="Google Scholar"></a>
+                    <a href="https://www.researchgate.net/profile/Muhammad-Ramadhan-207" target="_blank" title="ResearchGate"><img src="assets/researchgate_logo.png" alt="ResearchGate"></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-text">Muhammad Fitran Ramadhan &copy; 2026</div>
+    </footer>
+
+    <script src="assets/js/sidebar.js?v=20260623"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tangerang-Tomang Commute Telemetry</title>
+    <link rel="icon" type="image/x-icon" href="assets/profile_picture.jpg">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,16 +12,21 @@
 
     <header>
         <div class="header-content">
-            <div class="home-btn-container">
-                <span class="home-text">Dashboard</span>
-                <div class="logo-pic-fallback">🛰️</div>
-            </div>
+            <div class="logo-pic-wrapper"><img src="assets/profile_picture_t.png" alt="Logo" class="logo-pic"></div>
             <div class="nav-title"> 
                 <span class="rgb-word desktop-title">Tangerang - Tomang Corridor Traffic Analysis</span>
                 <span class="rgb-word mobile-title">Live Commute</span>
             </div>
             <div class="hotkeys-placeholder">
-                <div class="hotkey-circle" onclick="location.reload()" title="Refresh Data">♻️</div>
+                <button class="hotkey-circle" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Go to Top" aria-label="Go to Top">
+                    <img src="assets/top_icon.png" alt="Top" width="14" height="14">
+                </button>
+                <button class="hotkey-circle" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})" title="Go to Bottom" aria-label="Go to Bottom">
+                    <img src="assets/bottom_icon.png" alt="Bottom" width="14" height="14">
+                </button>
+                <button class="hotkey-circle" onclick="location.reload()" title="Refresh Data" aria-label="Refresh Data">
+                    <img src="assets/refresh_icon.png" alt="Refresh" width="12" height="12">
+                </button>
             </div>
         </div>
     </header>
@@ -36,7 +42,7 @@
                 
                 <div class="box terminal-panel">
                     <div class="terminal-header">
-                        <h3>🛰️ Node Telemetry Stream</h3>
+                        <h3>Node Telemetry Stream</h3>
                         <span id="last-update-tag">Syncing Ledger...</span>
                     </div>
                     <div id="traffic-nodes-container">
@@ -53,6 +59,26 @@
     </main>
 
     <footer class="contact-footer">
+        <div class="footer-sections">
+            <div class="footer-section">
+                <h3 class="footer-title">My Contacts</h3>
+                <div class="footer-links">
+                    <a href="https://wa.me/6281398575252" target="_blank" title="WhatsApp"><img src="assets/whatsapp_logo.png" alt="WhatsApp"></a>
+                    <a href="mailto:fitranhp@gmail.com" title="Email"><img src="assets/gmail_logo.png" alt="Email" class="logo-gmail"></a>
+                    <a href="https://www.linkedin.com/in/muhammad-fitran-ramadhan/?locale=en_US" target="_blank" title="LinkedIn"><img src="assets/linkedin_logo.png" alt="LinkedIn"></a>
+                    <a href="https://www.instagram.com/m._fitran/" target="_blank" title="Instagram"><img src="assets/instagram_logo.jpeg" alt="Instagram"></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3 class="footer-title">Professional Profiles</h3>
+                <div class="footer-links">
+                    <a href="https://github.com/MFitran" target="_blank" title="GitHub"><img src="assets/github_logo.png" alt="GitHub" class="logo-github"></a>
+                    <a href="https://leetcode.com/u/Fitran/" target="_blank" title="LeetCode"><img src="assets/leetcode_logo.png" alt="LeetCode"></a>
+                    <a href="https://scholar.google.com/citations?user=GgtQvKgAAAAJ&hl=en" target="_blank" title="Google Scholar"><img src="assets/google_scholar_logo.png" alt="Google Scholar"></a>
+                    <a href="https://www.researchgate.net/profile/Muhammad-Ramadhan-207" target="_blank" title="ResearchGate"><img src="assets/researchgate_logo.png" alt="ResearchGate"></a>
+                </div>
+            </div>
+        </div>
         <div class="footer-text">Muhammad Fitran Ramadhan &copy; 2026</div>
     </footer>
 
