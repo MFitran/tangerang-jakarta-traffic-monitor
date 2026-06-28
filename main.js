@@ -30,39 +30,50 @@ document.addEventListener('DOMContentLoaded', () => {
             const client = window.getSupabaseClient();
             if (!client) throw new Error("Supabase authenticated initialization matrix failed.");
 
-            // Fetch coordinates and logs in parallel to join client-side
-            const [coordsRes, logsRes] = await Promise.all([
-                client.from('jakarta_traffic_coords').select('id, road_name, coordinate, recent_log_id'),
-                client.from('jakarta_traffic_logs').select('id, road_id, current_speed, free_flow_speed, congestion_percentage, status, fetched_at')
-            ]);
+            // 1. Fetch all coordinate records
+            const { data: coords, error: coordsError } = await client
+                .from('jakarta_traffic_coords')
+                .select('id, road_name, coordinate, recent_log_id');
 
-            if (coordsRes.error) {
-                console.error("Error fetching coordinates:", coordsRes.error);
-                return;
-            }
-            if (logsRes.error) {
-                console.error("Error fetching logs:", logsRes.error);
+            if (coordsError) {
+                console.error("Error fetching coordinates:", coordsError);
                 return;
             }
 
-            const coords = coordsRes.data || [];
-            const logs = logsRes.data || [];
+            const panel = document.getElementById('traffic-nodes-container');
+
+            if (!coords || coords.length === 0) {
+                panel.innerHTML = '<div class="loading-state">Zero dataset entries extracted.</div>';
+                trafficVectorGroup.clearLayers();
+                return;
+            }
+
+            // 2. Extract recent_log_ids (filtering out any nulls/undefined values)
+            const recentLogIds = coords
+                .map(c => c.recent_log_id)
+                .filter(id => id !== null && id !== undefined);
+
+            let logs = [];
+            if (recentLogIds.length > 0) {
+                // 3. Fetch only the 10 recent logs matching these IDs
+                const { data: logsData, error: logsError } = await client
+                    .from('jakarta_traffic_logs')
+                    .select('id, road_id, current_speed, free_flow_speed, congestion_percentage, status, fetched_at')
+                    .in('id', recentLogIds);
+
+                if (logsError) {
+                    console.error("Error fetching logs:", logsError);
+                    return;
+                }
+                logs = logsData || [];
+            }
 
             // Index logs by their primary key ID
             const logsMap = new Map(logs.map(l => [String(l.id), l]));
 
             // Map and join logs with coordinates
             const records = coords.map(coord => {
-                let log = coord.recent_log_id ? logsMap.get(String(coord.recent_log_id)) : null;
-
-                // Fallback: match by road_id and find latest log if recent_log_id mapping is blank
-                if (!log) {
-                    const roadLogs = logs.filter(l => String(l.road_id) === String(coord.id));
-                    if (roadLogs.length > 0) {
-                        roadLogs.sort((a, b) => new Date(b.fetched_at) - new Date(a.fetched_at));
-                        log = roadLogs[0];
-                    }
-                }
+                const log = coord.recent_log_id ? logsMap.get(String(coord.recent_log_id)) : null;
 
                 return {
                     id: coord.id,
@@ -72,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             });
 
-            const panel = document.getElementById('traffic-nodes-container');
             panel.innerHTML = '';
             trafficVectorGroup.clearLayers();
 
