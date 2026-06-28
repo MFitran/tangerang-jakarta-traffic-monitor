@@ -234,14 +234,6 @@ section#traffic-analysis {
     background-clip: padding-box;
 }
 
-Get-Content : A positional parameter cannot be found that accepts argument 'style_chunk2.css'.
-At line:1 char:1
-+ Get-Content style_chunk1.css style_chunk2.css
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBindingException
-    + FullyQualifiedErrorId : PositionalParameterNotFound,Microsoft.PowerShell.Commands.GetContentCommand
- 
-
 .loading-state {
     color: #6f7380;
     text-align: center;

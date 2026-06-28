@@ -25,37 +25,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const trafficVectorGroup = L.layerGroup().addTo(map);
 
-    async function streamLiveTrafficMatrix() {
+    async function fetchAndRenderTraffic() {
         try {
             const client = window.getSupabaseClient();
             if (!client) throw new Error("Supabase authenticated initialization matrix failed.");
 
-            // Download snapshot payload directly from your storage bucket
-            const { data: realtimeData, error: realtimeError } = await client
-                .from('jakarta_traffic_logs')
-                .select('*')
-                .order('fetched_at', { ascending: false })
-                .limit(10);
+            // Fetch coordinates and logs in parallel to join client-side
+            const [coordsRes, logsRes] = await Promise.all([
+                client.from('jakarta_traffic_coords').select('id, road_name, coordinate, recent_log_id'),
+                client.from('jakarta_traffic_logs').select('id, road_id, current_speed, free_flow_speed, congestion_percentage, status, fetched_at')
+            ]);
 
-            if (realtimeError) {
-                console.error("Error fetching real-time data:", realtimeError);
+            if (coordsRes.error) {
+                console.error("Error fetching coordinates:", coordsRes.error);
                 return;
             }
-            
-            const records = realtimeData;
+            if (logsRes.error) {
+                console.error("Error fetching logs:", logsRes.error);
+                return;
+            }
 
-            // Subscribe to real-time changes
-            client
-                .channel('jakarta_traffic_channel')
-                .on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'jakarta_traffic_logs' }, 
-                    payload => {
-                        console.log('Change received!', payload);
-                        // Re-fetch and re-render data on change
-                        streamLiveTrafficMatrix();
+            const coords = coordsRes.data || [];
+            const logs = logsRes.data || [];
+
+            // Index logs by their primary key ID
+            const logsMap = new Map(logs.map(l => [String(l.id), l]));
+
+            // Map and join logs with coordinates
+            const records = coords.map(coord => {
+                let log = coord.recent_log_id ? logsMap.get(String(coord.recent_log_id)) : null;
+
+                // Fallback: match by road_id and find latest log if recent_log_id mapping is blank
+                if (!log) {
+                    const roadLogs = logs.filter(l => String(l.road_id) === String(coord.id));
+                    if (roadLogs.length > 0) {
+                        roadLogs.sort((a, b) => new Date(b.fetched_at) - new Date(a.fetched_at));
+                        log = roadLogs[0];
                     }
-                )
-                .subscribe();
+                }
+
+                return {
+                    id: coord.id,
+                    road_name: coord.road_name,
+                    coordinate: coord.coordinate,
+                    jakarta_traffic_logs: log
+                };
+            });
+
             const panel = document.getElementById('traffic-nodes-container');
             panel.innerHTML = '';
             trafficVectorGroup.clearLayers();
@@ -68,19 +84,33 @@ document.addEventListener('DOMContentLoaded', () => {
             // Sort sequentially (01 to 10) for UI side-panel alignment
             records.sort((x, y) => x.road_name.localeCompare(y.road_name));
             
-            const lastUpdate = records[0].fetched_at;
-            const clock = lastUpdate ? new Date(lastUpdate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
-            document.getElementById('last-update-tag').innerText = `UPDATED AT ${clock} WIB`;
+            let latestFetchedAt = null;
 
             // 🚀 LOOP ENTRIES TO GENERATE LANDMARK TELEMETRY BUBBLES
-            records.forEach(node => {
+            records.forEach(coordNode => {
+                const logData = coordNode.jakarta_traffic_logs;
+                const log = Array.isArray(logData) ? logData[0] : logData;
+
+                const current_speed = log?.current_speed ?? 0;
+                const free_flow_speed = log?.free_flow_speed ?? 0;
+                const congestion_percentage = log?.congestion_percentage ?? 0;
+                const status = log?.status ?? 'Lancar Jaya';
+                const fetched_at = log?.fetched_at;
+
+                if (fetched_at) {
+                    const nodeDate = new Date(fetched_at);
+                    if (!latestFetchedAt || nodeDate > latestFetchedAt) {
+                        latestFetchedAt = nodeDate;
+                    }
+                }
+
                 let hexCode = '#00C851'; // Lancar Jaya (Green)
                 let alphaBg = 'rgba(0, 200, 81, 0.04)';
                 
-                if (node.status === 'Macet Total') {
+                if (status === 'Macet Total') {
                     hexCode = '#D93025'; // Macet Total (Red)
                     alphaBg = 'rgba(217, 48, 37, 0.1)';
-                } else if (node.status === 'Padat Merayap') {
+                } else if (status === 'Padat Merayap') {
                     hexCode = '#F9AB00'; // Padat Merayap (Amber)
                     alphaBg = 'rgba(249, 171, 0, 0.08)';
                 }
@@ -94,19 +124,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 element.innerHTML = `
                     <div>
-                        <h4 style="font-size: 14px; font-weight: 600; color: #E0E0E0;">${node.road_name}</h4>
-                        <p style="font-size: 12px; color: #777; margin-top: 3px;">Velocity: <strong style="color: #FFF;">${node.current_speed} km/h</strong></p>
+                        <h4 style="font-size: 14px; font-weight: 600; color: #E0E0E0;">${coordNode.road_name}</h4>
+                        <p style="font-size: 12px; color: #777; margin-top: 3px;">Velocity: <strong style="color: #FFF;">${current_speed} km/h</strong></p>
                     </div>
                     <div style="text-align: right;">
-                        <span style="font-size: 12px; font-weight: 700; color: ${hexCode}; text-transform: uppercase;">${node.status}</span>
-                        <p style="font-size: 11px; color: #555; margin-top: 3px;">Index: ${node.congestion_percentage}%</p>
+                        <span style="font-size: 12px; font-weight: 700; color: ${hexCode}; text-transform: uppercase;">${status}</span>
+                        <p style="font-size: 11px; color: #555; margin-top: 3px;">Index: ${congestion_percentage}%</p>
                     </div>
                 `;
                 panel.appendChild(element);
 
                 // 🗺️ Render Telemetry Bubble from Point Coordinates
-                if (node.coordinate && Array.isArray(node.coordinate) && node.coordinate.length === 2) {
-                    const targetPoint = node.coordinate;
+                if (coordNode.coordinate && Array.isArray(coordNode.coordinate) && coordNode.coordinate.length === 2) {
+                    const targetPoint = coordNode.coordinate;
                     
                     // Configurable coverage area size in meters (e.g., 500m reach)
                     const operationalRadius = 500; 
@@ -132,9 +162,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const popupContent = `
                         <div style="font-size: 12px; color: #FFF; font-family: 'Inter', sans-serif;">
-                            <strong style="display: block; font-size: 13px; margin-bottom: 4px;">${node.road_name}</strong>
-                            Status: <span style="font-weight: bold; color: ${hexCode};">${node.status}</span><br>
-                            Speed: <strong>${node.current_speed} km/h</strong>
+                            <strong style="display: block; font-size: 13px; margin-bottom: 4px;">${coordNode.road_name}</strong>
+                            Status: <span style="font-weight: bold; color: ${hexCode};">${status}</span><br>
+                            Speed: <strong>${current_speed} km/h</strong>
                         </div>
                     `;
 
@@ -150,10 +180,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            const clock = latestFetchedAt ? latestFetchedAt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'N/A';
+            document.getElementById('last-update-tag').innerText = `UPDATED AT ${clock} WIB`;
+
         } catch (problem) {
             console.error("Pipeline render execution error: ", problem);
         }
     }
 
-    streamLiveTrafficMatrix();
+    // Initial load
+    fetchAndRenderTraffic();
+
+    // Subscribe to realtime changes once
+    const client = window.getSupabaseClient();
+    if (client) {
+        client
+            .channel('jakarta_traffic_realtime_channel')
+            .on('postgres_changes', 
+                { event: '*', schema: 'public', table: 'jakarta_traffic_coords' }, 
+                payload => {
+                    console.log('Coordinates change received!', payload);
+                    fetchAndRenderTraffic();
+                }
+            )
+            .on('postgres_changes', 
+                { event: '*', schema: 'public', table: 'jakarta_traffic_logs' }, 
+                payload => {
+                    console.log('Traffic logs change received!', payload);
+                    fetchAndRenderTraffic();
+                }
+            )
+            .subscribe();
+    }
 });
