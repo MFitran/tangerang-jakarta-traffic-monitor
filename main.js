@@ -1,6 +1,6 @@
 window.envConfig = {
     SUPABASE_URL: "https://wwapndvliynmdeejtryz.supabase.co",
-    SUPABASE_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind3YXBuZHZsaXlubWRlZWp0cnl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk0NDgsImV4cCI6MjA5NjYyNTQ0OH0.ec9X_hPU-YoflTCJkTwKJzXygW3qC3dYYWUFQkiiQrM"
+    SUPABASE_KEY: "sb_publishable_h2mFkHzvYdG9YJxh83FrRQ_w2KkTCtb"
 };
 
 window.getSupabaseClient = function() {
@@ -15,7 +15,7 @@ window.getSupabaseClient = function() {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize Map Canvas centered over the core highway corridor
     const map = L.map('traffic-map', {
-        zoomControl: true,
+        zoomControl: false,
         attributionControl: false
     }).setView([-6.1950, 106.7200], 12); 
 
@@ -98,13 +98,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 🚀 LOOP ENTRIES TO GENERATE LANDMARK TELEMETRY BUBBLES
             records.forEach(coordNode => {
-                const logData = coordNode.jakarta_traffic_logs;
-                const log = Array.isArray(logData) ? logData[0] : logData;
+                const log = coordNode.jakarta_traffic_logs;
 
                 const current_speed = log?.current_speed ?? 0;
                 const free_flow_speed = log?.free_flow_speed ?? 0;
                 const congestion_percentage = log?.congestion_percentage ?? 0;
-                const status = log?.status ?? 'Lancar Jaya';
+                
+                const statusMap = {
+                    1: "Lancar Jaya",
+                    2: "Padat Merayap",
+                    3: "Macet Total"
+                };
+                const status = statusMap[log?.status] ?? 'Lancar Jaya';
                 const fetched_at = log?.fetched_at;
 
                 if (fetched_at) {
