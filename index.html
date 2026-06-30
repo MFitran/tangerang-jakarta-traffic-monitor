@@ -9,6 +9,7 @@
     <link rel="icon" type="image/x-icon" href="assets/profile_picture.jpg">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
 </head>
 <body>
 
@@ -56,6 +57,42 @@
                     </div>
                 </div>
 
+            </div>
+        </section>
+
+        <section id="historical-analytics" class="box analytics-box">
+            <div class="analytics-header">
+                <h2>Analytics & Historical Trends</h2>
+                <p>Interactive telemetry graphs highlighting speed profiles, congestion bottlenecks, and dataset composition.</p>
+            </div>
+
+            <!-- Top Level Category Tabs -->
+            <div class="category-tabs">
+                <button class="tab-btn active" data-category="speed">⚡ Speed Analytics</button>
+                <button class="tab-btn" data-category="congestion">📊 Congestion Analytics</button>
+                <button class="tab-btn" data-category="contributors">🍕 Congestion Contributors</button>
+                <button class="tab-btn" data-category="table_data">📋 Data Summary</button>
+            </div>
+
+            <!-- Sub-tabs for Speed/Congestion Granularity -->
+            <div class="sub-tabs-container" id="sub-tabs-container">
+                <div class="sub-tabs">
+                    <button class="sub-tab-btn" data-granularity="all">🌐 All Time</button>
+                    <button class="sub-tab-btn" data-granularity="date">📅 per Date</button>
+                    <button class="sub-tab-btn" data-granularity="day">📆 per Day</button>
+                    <button class="sub-tab-btn" data-granularity="hour">🕐 per Hour</button>
+                    <button class="sub-tab-btn active" data-granularity="month">🗓️ per Month</button>
+                </div>
+            </div>
+
+            <!-- Tableau Visualization Embed -->
+            <div class="tableau-container">
+                <tableau-viz id="tableauViz" 
+                    src="https://public.tableau.com/views/JakartaTrafficAnalytics/Avg_CurrentSpeedperMonth"
+                    device="desktop"
+                    toolbar="bottom"
+                    hide-tabs="true">
+                </tableau-viz>
             </div>
         </section>
     </main>

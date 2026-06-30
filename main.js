@@ -227,4 +227,87 @@ document.addEventListener('DOMContentLoaded', () => {
             )
             .subscribe();
     }
+
+    // --- TABLEAU INTERACTIVE TABS INTEGRATION ---
+    const VIZ_BASE_URL = "https://public.tableau.com/views/JakartaTrafficAnalytics/";
+    const VIZ_MAP = {
+        speed: {
+            all: "Avg_CurrentSpeedAllTime",
+            date: "Avg_CurrentSpeedperDate",
+            day: "Avg_CurrentSpeedperDay",
+            hour: "Avg_CurrentSpeedperHour",
+            month: "Avg_CurrentSpeedperMonth"
+        },
+        congestion: {
+            all: "Avg_CongestionAllTime",
+            date: "Avg_CongestionperDate",
+            day: "Avg_CongestionperDay",
+            hour: "Avg_CongestionperHour",
+            month: "Avg_CongestionperMonth"
+        },
+        contributors: "CongestionContributors",
+        table_data: "TableData"
+    };
+
+    let activeCategory = "speed"; // default
+    let activeGranularity = "month"; // default
+
+    const vizElement = document.getElementById("tableauViz");
+    const subTabsContainer = document.getElementById("sub-tabs-container");
+
+    const categoryButtons = document.querySelectorAll(".category-tabs .tab-btn");
+    const subTabButtons = document.querySelectorAll(".sub-tabs .sub-tab-btn");
+
+    function updateTableauViz() {
+        if (!vizElement) return;
+        
+        let viewSlug = "";
+        if (activeCategory === "speed" || activeCategory === "congestion") {
+            viewSlug = VIZ_MAP[activeCategory][activeGranularity];
+        } else {
+            viewSlug = VIZ_MAP[activeCategory];
+        }
+        
+        const newSrc = `${VIZ_BASE_URL}${viewSlug}`;
+        
+        // Only update if the URL actually changed to prevent redundant reloads
+        if (vizElement.getAttribute("src") !== newSrc) {
+            vizElement.setAttribute("src", newSrc);
+            console.log("Updating Tableau visualization source to:", newSrc);
+        }
+    }
+
+    categoryButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            // Remove active class from all buttons
+            categoryButtons.forEach(b => b.classList.remove("active"));
+            
+            // Add active class to clicked button
+            btn.classList.add("active");
+            activeCategory = btn.getAttribute("data-category");
+
+            // Show or hide sub-tabs based on category selection
+            if (activeCategory === "speed" || activeCategory === "congestion") {
+                subTabsContainer.classList.remove("hidden");
+            } else {
+                subTabsContainer.classList.add("hidden");
+            }
+
+            updateTableauViz();
+        });
+    });
+
+    subTabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            // Remove active class from all sub-buttons
+            subTabButtons.forEach(b => b.classList.remove("active"));
+            
+            // Add active class to clicked button
+            btn.classList.add("active");
+            activeGranularity = btn.getAttribute("data-granularity");
+
+            updateTableauViz();
+        });
+    });
 });
+

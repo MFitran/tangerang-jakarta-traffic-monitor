@@ -340,6 +340,135 @@ footer.contact-footer {
     font-family: 'Inter', sans-serif;
 }
 
+
+/* --- HISTORICAL ANALYTICS --- */
+.analytics-box {
+    margin-top: 16px;
+    background: #000000;
+}
+
+.analytics-header {
+    margin-bottom: 24px;
+}
+
+.analytics-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+}
+
+.analytics-header p {
+    font-size: 14px;
+    color: #777777;
+}
+
+.category-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-bottom: 1px solid #121212;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: 1px solid #222222;
+    color: #8f93a1;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover {
+    border-color: #555555;
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.tab-btn.active {
+    background: #E0E0E0;
+    color: #000000;
+    border-color: #E0E0E0;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.sub-tabs-container {
+    transition: all 0.3s ease;
+    opacity: 1;
+    max-height: 100px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.sub-tabs-container.hidden {
+    opacity: 0;
+    max-height: 0;
+    margin-bottom: 0;
+    pointer-events: none;
+}
+
+.sub-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.sub-tab-btn {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #151515;
+    color: #6f7380;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sub-tab-btn:hover {
+    border-color: #444444;
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sub-tab-btn.active {
+    border-color: #E0E0E0;
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.tableau-container {
+    width: 100%;
+    min-height: 650px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000000;
+    border: 1px solid #121212;
+    position: relative;
+}
+
+tableau-viz {
+    width: 100%;
+    height: 650px;
+    display: block;
+}
+
+/* Neutralize default white backgrounds in Tableau iframes, placeholders, and containers */
+.tableauPlaceholder,
+.tableauViz,
+tableau-viz,
+.tableau-container iframe,
+tableau-viz iframe,
+#historical-analytics iframe {
+    background-color: transparent !important;
+    background: none !important;
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 900px) {
     body { padding-top: 90px; font-size: 16px; }
@@ -349,4 +478,6 @@ footer.contact-footer {
     .header-content { padding: 0 15px; }
     .nav-title { font-size: 15px; }
     .mobile-title { display: inline; }
+    .tableau-container { min-height: 550px; }
+    tableau-viz { height: 550px; }
 }
